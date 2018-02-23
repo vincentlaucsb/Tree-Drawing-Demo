@@ -4,21 +4,9 @@
 #include "tree.h"
 #include <fstream>
 
-void binary_tree(TreeNode* tree, int depth) {
-    // A function that creates a complete binary tree recursively
-    TreeNode *left, *right;
-
-    if (depth) {
-        left = tree->left = new TreeNode();
-        right = tree->right = new TreeNode();
-        binary_tree(left, depth - 1);
-        binary_tree(right, depth - 1);
-    }
-}
-
 void draw_tree(SVG::Group& edges, SVG::Group& vertices, TreeNode& tree) {
     // Draw an SVG tree recursively
-    vertices.add_child(SVG::Circle(tree.x, tree.y, 25));
+    vertices.add_child(SVG::Circle(tree.x, tree.y, 10));
     if (tree.left) {
         draw_tree(edges, vertices, *(tree.left));
         edges.add_child(SVG::Line(tree.x, tree.left->x, tree.y, tree.left->y));
@@ -30,14 +18,15 @@ void draw_tree(SVG::Group& edges, SVG::Group& vertices, TreeNode& tree) {
     }
 }
 
-int main() {
+int main(int argc, char** argv) {
+    /*
     // Create a binary tree of depth 2
     TreeNode t1, t2;
     binary_tree(&t1, 2);
     binary_tree(&t2, 5);
     t1.calculate_xy();
     t2.calculate_xy();
-
+    
     std::cout << t1.displacement << std::endl;
     std::cout << t1.left->displacement << " - " << t1.right->displacement << std::endl;
     std::cout << t1.left->left->displacement << ", " << t1.left->right->displacement <<
@@ -58,6 +47,27 @@ int main() {
     draw_tree(edges, nodes, t2);
     root.add_child(edges, nodes);
     outfile << root.to_string();
+    */
+    
+    if (argc < 3) {
+        std::cout << "Usage: " << argv[0] << " [output file] [depth]" << std::endl
+            << "Produces a binary tree of specified depth" << std::endl;
+        return 1;
+    }
+    
+    TreeNode tree;
+    binary_tree(&tree, std::stoi(argv[2]));
+    tree.calculate_xy();
+    
+    SVG::SVG root;
+    SVG::Group edges, nodes;
+    edges.set_attr("stroke", "black")
+        .set_attr("stroke-width", "1px");
 
+    std::ofstream outfile(argv[1]);
+    draw_tree(edges, nodes, tree);
+    root.add_child(edges, nodes);
+    outfile << root.to_string();
+    
     return 0;
 }

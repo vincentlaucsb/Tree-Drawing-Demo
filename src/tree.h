@@ -25,12 +25,13 @@ public:
   void calculate_displacement();
 
 private:
-
   void merge_subtrees(float displacement);
   float distance_between();
 
   std::vector<TreeNode*> left_contour();
   std::vector<TreeNode*> right_contour();
 };
+
+void binary_tree(TreeNode* tree, int depth);
 
 #endif //TREE_DRAWING_TREE_H

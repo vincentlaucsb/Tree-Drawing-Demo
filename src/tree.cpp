@@ -1,12 +1,23 @@
 #include "tree.h"
 #include <math.h>
 #include <iostream>
-#define X_SEPARATION 50
-#define Y_SEPARATION 50
+#define X_SEPARATION 25
+#define Y_SEPARATION 25
+
+void binary_tree(TreeNode* tree, int depth) {
+    // A function that creates a complete binary tree recursively
+    TreeNode *left, *right;
+
+    if (depth) {
+        left = tree->left = new TreeNode();
+        right = tree->right = new TreeNode();
+        binary_tree(left, depth - 1);
+        binary_tree(right, depth - 1);
+    }
+}
 
 void TreeNode::calculate_xy(const unsigned int depth, const float offset) {
     /** Calculate the x, y coordinates of each node via a preorder traversal
-     *  Also return the width of the final image
      */
 
     if (depth == 0) this->calculate_displacement();
