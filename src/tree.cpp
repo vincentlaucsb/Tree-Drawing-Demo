@@ -1,8 +1,8 @@
 #include "tree.h"
 #include <math.h>
 #include <iostream>
-#define X_SEPARATION 25
-#define Y_SEPARATION 25
+#define X_SEPARATION 10
+#define Y_SEPARATION 10
 
 void binary_tree(TreeNode* tree, int depth) {
     // A function that creates a complete binary tree recursively
@@ -13,6 +13,23 @@ void binary_tree(TreeNode* tree, int depth) {
         right = tree->right = new TreeNode();
         binary_tree(left, depth - 1);
         binary_tree(right, depth - 1);
+    }
+}
+
+TreeNode IncompleteBinaryTree::make_tree(int depth) {
+    TreeNode tree;
+    make_tree(tree, depth);
+    return tree;
+}
+
+void IncompleteBinaryTree::make_tree(TreeNode& tree, int depth) {
+    // Generate an incomplete binary tree recursively
+    if (depth) {
+        auto lchance = distribution(generator), rchance = distribution(generator);
+        if (lchance > 0.2) tree.left = new TreeNode();
+        if (rchance > 0.2) tree.right = new TreeNode();
+        if (tree.left) this->make_tree(*(tree.left), depth - 1);
+        if (tree.right) this->make_tree(*(tree.right), depth - 1);
     }
 }
 
@@ -81,12 +98,15 @@ void TreeNode::merge_subtrees(float displacement) {
      */
 
     // Set displacements for edge cases
-    if (!this->left && !this->right) { // Base Case: This is a leaf node (i.e. no children)
+    if (!this->left && !this->right) {
+        // Base Case: This is a leaf node (i.e. no children)
         this->displacement = displacement;
         return;
     }
-    else if (!this->left || !this->right) { // Edge Case: One child NULL
-        this->displacement = 0.0;
+    else if (!this->left || !this->right) {
+        // Edge Case: One child is NULL
+        if (this->left) this->left->displacement = 1;
+        else this->right->displacement = -1;
     }
 
     // Postorder traversal
@@ -95,10 +115,8 @@ void TreeNode::merge_subtrees(float displacement) {
 
     // Merge subtrees (if they exist)
     if (this->left && this->right) {
-        // Place this node halfway between its children x-coordinate wise
-        this->displacement = 0;
-
-        // Move subtrees
+        // Because by default, this node has displacement zero,
+        // it will be centered over its children
         float subtree_separation = (this->distance_between(this->left, this->right))/2;
         this->left->displacement = -subtree_separation;
         this->right->displacement = subtree_separation;

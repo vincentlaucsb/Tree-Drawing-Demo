@@ -6,7 +6,7 @@
 
 void draw_tree(SVG::Group& edges, SVG::Group& vertices, TreeNode& tree) {
     // Draw an SVG tree recursively
-    vertices.add_child(SVG::Circle(tree.x, tree.y, 10));
+    vertices.add_child(SVG::Circle(tree.x, tree.y, 3 ));
     if (tree.left) {
         draw_tree(edges, vertices, *(tree.left));
         edges.add_child(SVG::Line(tree.x, tree.left->x, tree.y, tree.left->y));
@@ -24,7 +24,9 @@ int main(int argc, char** argv) {
             << "Produces a binary tree of specified depth" << std::endl;
         return 1;
     }
-    
+
+    //IncompleteBinaryTree tree_maker;
+    //TreeNode tree = tree_maker.make_tree(std::stoi(argv[2]));
     TreeNode tree;
     binary_tree(&tree, std::stoi(argv[2]));
     tree.calculate_xy();
