@@ -34,49 +34,42 @@ void TreeNode::calculate_displacement() {
     this->merge_subtrees(0);
 }
 
-float TreeNode::distance_between() {
-    /** Return the minimum distance required between two subtrees
-     *  such that they have a horizontal distance of two
+float TreeNode::distance_between(TreeNode* left, TreeNode* right) {
+    /* Return the minimum horizontal distance needed between two subtrees
+     * such that they can be placed 2 units apart horizontally
+     *
+     * Precondition: All nodes except the top nodes have correct displacements set
      */
+    auto left_side = left->right_contour(),
+            right_side = right->left_contour();
+    std::map<int, float> left_cd = TreeNode::cumulative_displacement(left_side),
+            right_cd = TreeNode::cumulative_displacement(right_side);
 
-    // This function should never be called on null nodes
-    assert(left != nullptr);
-    assert(right != nullptr);
+    float left_dist, right_dist, current_dist = 0;
 
-    // First, get cumulative displacement
-    // first = depth, second = displacement
-    std::map<int, int> left_cd, right_cd;
-    int left_max_depth = 0, right_max_depth = 0;
+    for (int i = 0; i < (int)std::max(left_cd.size(), right_cd.size()); i++) {
+        left_dist = 0;
+        right_dist = 0;
+        if (left_cd.find(i) != left_cd.end()) left_dist = left_cd[i];
+        if (right_cd.find(i) != right_cd.end()) right_dist = right_cd[i];
 
-    // Scan left subtree
-    auto left_side = this->right_contour();
-    if (!left_side.empty()) {
-        left_cd[0] = left_side[0]->displacement;
-        for (size_t i = 1; i < left_side.size(); i++) {
-            left_cd[i] = left_cd[i - 1] + left_side[i]->displacement;
-            left_max_depth++;
-        }
+        if (abs(right_dist - left_dist) > current_dist) current_dist = abs(right_dist - left_dist);
     }
 
-    // Scan right subtree
-    auto right_side = this->left_contour();
-    if (!right_side.empty()) {
-        right_cd[0] = right_side[0]->displacement;
-        for (size_t i = 1; i < right_side.size(); i++) {
-            right_cd[i] = right_cd[i - 1] + right_side[i]->displacement;
-            right_max_depth++;
-        }
-    }
+    if ((left != right) && (left->displacement == 0) || (right->displacement == 0)) current_dist += 2;
+    return current_dist;
+}
 
-    int max_depth = std::min(left_max_depth, right_max_depth);
+std::map<int, float> TreeNode::cumulative_displacement(
+        const std::vector<TreeNode*>& contour) {
+    // Return the cumulative displacement taken up by a contour at each depth
 
-    // Right cumulative displacement should be negative, because we're scanning the left contour
-    // Left cumulative displacement should be positive, because we're scanning the right contour
-    assert(left_cd[max_depth] >= 0);
-    assert(right_cd[max_depth] <= 0);
+    std::map<int, float> cd;
+    if (!contour.empty()) cd[0] = contour[0]->displacement;
+    for (size_t i = 1; i < contour.size(); i++)
+        cd[i] = cd[i - 1] + contour[i]->displacement;
 
-    auto ret_val = left_cd[max_depth] + abs(right_cd[max_depth]);
-    return (ret_val);
+    return cd;
 }
 
 void TreeNode::merge_subtrees(float displacement) {
@@ -102,34 +95,38 @@ void TreeNode::merge_subtrees(float displacement) {
 
     // Merge subtrees (if they exist)
     if (this->left && this->right) {
-        // Temporary values
-        this->left->displacement = -1;
-        this->right->displacement = 1;
-
-        // Move subtrees
-        int subtree_separation = this->distance_between()/2;
-        this->left->displacement = -subtree_separation;
-        this->right->displacement = subtree_separation;
-
         // Place this node halfway between its children x-coordinate wise
         this->displacement = 0;
+
+        // Move subtrees
+        float subtree_separation = (this->distance_between(this->left, this->right))/2;
+        this->left->displacement = -subtree_separation;
+        this->right->displacement = subtree_separation;
     }
 }
 
 std::vector<TreeNode*> TreeNode::left_contour() {
     /** Return a list with the left contour of a vertex */
-    std::vector<TreeNode*> ret;
-    for (TreeNode* node = this->left; node != nullptr; node = node->left) {
-        ret.push_back(node);
-    }
-    return ret;
+    std::vector<TreeNode*> node_list;
+    this->left_contour(0, node_list);
+    return node_list;
+}
+
+void TreeNode::left_contour(int depth, std::vector<TreeNode*>& node_list) {
+    if (node_list.size() <= depth) node_list.push_back(this);
+    if (this->left) this->left->left_contour(depth + 1, node_list);
+    if (this->right) this->right->left_contour(depth + 1, node_list);
 }
 
 std::vector<TreeNode*> TreeNode::right_contour() {
     /** Return a list with the right contour of a vertex */
-    std::vector<TreeNode*> ret;
-    for (TreeNode* node = this->right; node != nullptr; node = node->right) {
-        ret.push_back(node);
-    }
-    return ret;
+    std::vector<TreeNode*> node_list;
+    this->right_contour(0, node_list);
+    return node_list;
+}
+
+void TreeNode::right_contour(int depth, std::vector<TreeNode*>& node_list) {
+    if (node_list.size() <= depth) node_list.push_back(this);
+    if (this->right) this->right->right_contour(depth + 1, node_list);
+    if (this->left) this->left->right_contour(depth + 1, node_list);
 }

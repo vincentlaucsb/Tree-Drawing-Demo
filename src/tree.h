@@ -13,23 +13,27 @@
 
 class TreeNode {
 public:
-  int x;
-  int y;
+    int x;
+    int y;
 
-  float displacement = NAN;
+    float displacement = NAN;
 
-  TreeNode* left = nullptr;
-  TreeNode* right = nullptr;    
+    TreeNode* left = nullptr;
+    TreeNode* right = nullptr;        
 
-  void calculate_xy(const unsigned int depth = 0, const float offset=0);
-  void calculate_displacement();
+    static float distance_between(TreeNode* left, TreeNode *right);
+    static std::map<int, float> cumulative_displacement(const std::vector<TreeNode*>& node_list);
+    void calculate_xy(const unsigned int depth = 0, const float offset=0);
+    void calculate_displacement();
+    std::vector<TreeNode*> left_contour();
+    std::vector<TreeNode*> right_contour();
 
 private:
-  void merge_subtrees(float displacement);
-  float distance_between();
+    void merge_subtrees(float displacement);
+    float distance_between();
 
-  std::vector<TreeNode*> left_contour();
-  std::vector<TreeNode*> right_contour();
+    void left_contour(int depth, std::vector<TreeNode*>& node_list);
+    void right_contour(int depth, std::vector<TreeNode*>& node_list);
 };
 
 void binary_tree(TreeNode* tree, int depth);
