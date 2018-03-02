@@ -14,8 +14,8 @@
 #include <random>
 
 struct DrawOpts {
-    int x_sep;
-    int y_sep;
+    float x_sep;
+    float y_sep;
     int node_size;
     std::string edge_color;
     std::string edge_width;
@@ -29,8 +29,16 @@ public:
     float y;
     float displacement = 0;
 
-    TreeNode* left = nullptr;
-    TreeNode* right = nullptr;        
+    inline TreeNode* left() { return this->left_ptr.get(); }
+    inline TreeNode* right() { return this->right_ptr.get(); }
+    inline TreeNode* add_left() {
+        this->left_ptr = std::make_shared<TreeNode>(TreeNode());
+        return this->left();
+    };
+    inline TreeNode* add_right() {
+        this->right_ptr = std::make_shared<TreeNode>(TreeNode());
+        return this->right();
+    };
 
     static float distance_between(TreeNode* left, TreeNode *right);
     static std::map<int, float> cumulative_displacement(const std::vector<TreeNode*>& node_list);
@@ -41,6 +49,9 @@ public:
     std::vector<TreeNode*> right_contour();
 
 private:
+    std::shared_ptr<TreeNode> left_ptr = nullptr;
+    std::shared_ptr<TreeNode> right_ptr = nullptr;
+
     void merge_subtrees(float displacement);
     void left_contour(int depth, std::vector<TreeNode*>& node_list);
     void right_contour(int depth, std::vector<TreeNode*>& node_list);

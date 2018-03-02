@@ -11,8 +11,8 @@ void TreeNode::calculate_xy(const unsigned int depth, const float offset, const 
     this->x = offset + (displacement * options.x_sep);
     this->y = depth * options.y_sep;
 
-    if (left) left->calculate_xy(depth + 1, this->x);
-    if (right) right->calculate_xy(depth + 1, this->x);
+    if (left()) left()->calculate_xy(depth + 1, this->x, options);
+    if (right()) right()->calculate_xy(depth + 1, this->x, options);
 }
 
 void TreeNode::calculate_displacement() {
@@ -42,7 +42,7 @@ float TreeNode::distance_between(TreeNode* left, TreeNode* right) {
         if (abs(right_dist - left_dist) > current_dist) current_dist = abs(right_dist - left_dist);
     }
 
-    if ((left != right) && (left->displacement == 0) || (right->displacement == 0)) current_dist += 2;
+    if (( (left != right) && (left->displacement == 0) ) || (right->displacement == 0) ) current_dist += 2;
     return current_dist;
 }
 
@@ -67,28 +67,28 @@ void TreeNode::merge_subtrees(float displacement) {
      */
 
     // Set displacements for edge cases
-    if (!this->left && !this->right) {
+    if (!this->left() && !this->right()) {
         // Base Case: This is a leaf node (i.e. no children)
         this->displacement = displacement;
         return;
     }
-    else if (!this->left || !this->right) {
+    else if (!this->left() || !this->right()) {
         // Edge Case: One child is NULL
-        if (this->left) this->left->displacement = 1;
-        else this->right->displacement = -1;
+        if (this->left()) this->left()->displacement = 1;
+        else this->right()->displacement = -1;
     }
 
     // Postorder traversal
-    if (this->left) this->left->merge_subtrees(-1);
-    if (this->right) this->right->merge_subtrees(1);
+    if (this->left()) this->left()->merge_subtrees(-1);
+    if (this->right()) this->right()->merge_subtrees(1);
 
     // Merge subtrees (if they exist)
-    if (this->left && this->right) {
+    if (this->left() && this->right()) {
         // Because by default, this node has displacement zero,
         // it will be centered over its children
-        float subtree_separation = (this->distance_between(this->left, this->right))/2;
-        this->left->displacement = -subtree_separation;
-        this->right->displacement = subtree_separation;
+        float subtree_separation = (this->distance_between(this->left(), this->right()))/2;
+        this->left()->displacement = -subtree_separation;
+        this->right()->displacement = subtree_separation;
     }
 }
 
@@ -101,8 +101,8 @@ std::vector<TreeNode*> TreeNode::left_contour() {
 
 void TreeNode::left_contour(int depth, std::vector<TreeNode*>& node_list) {
     if (node_list.size() <= depth) node_list.push_back(this);
-    if (this->left) this->left->left_contour(depth + 1, node_list);
-    if (this->right) this->right->left_contour(depth + 1, node_list);
+    if (this->left()) this->left()->left_contour(depth + 1, node_list);
+    if (this->right()) this->right()->left_contour(depth + 1, node_list);
 }
 
 std::vector<TreeNode*> TreeNode::right_contour() {
@@ -114,6 +114,6 @@ std::vector<TreeNode*> TreeNode::right_contour() {
 
 void TreeNode::right_contour(int depth, std::vector<TreeNode*>& node_list) {
     if (node_list.size() <= depth) node_list.push_back(this);
-    if (this->right) this->right->right_contour(depth + 1, node_list);
-    if (this->left) this->left->right_contour(depth + 1, node_list);
+    if (this->right()) this->right()->right_contour(depth + 1, node_list);
+    if (this->left()) this->left()->right_contour(depth + 1, node_list);
 }

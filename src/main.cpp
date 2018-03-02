@@ -12,7 +12,11 @@ int main(int argc, char** argv) {
 
     int depth = std::stoi(argv[2]);
 
-    SVG::SVG tree_drawing = draw_binary_tree(depth);
+    DrawOpts opts = DEFAULT_DRAWING_OPTIONS;
+    opts.x_sep = 7.5;
+    opts.y_sep = 7.5;
+
+    SVG::SVG tree_drawing = draw_binary_tree(depth, opts);
     std::ofstream outfile(argv[1]);
     outfile << tree_drawing.to_string();
     
