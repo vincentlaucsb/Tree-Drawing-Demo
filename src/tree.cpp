@@ -1,46 +1,15 @@
+// This file contains only the tree drawing algorithm itself
+
 #include "tree.h"
-#include <math.h>
-#include <iostream>
-#define X_SEPARATION 10
-#define Y_SEPARATION 10
 
-void binary_tree(TreeNode* tree, int depth) {
-    // A function that creates a complete binary tree recursively
-    TreeNode *left, *right;
-
-    if (depth) {
-        left = tree->left = new TreeNode();
-        right = tree->right = new TreeNode();
-        binary_tree(left, depth - 1);
-        binary_tree(right, depth - 1);
-    }
-}
-
-TreeNode IncompleteBinaryTree::make_tree(int depth) {
-    TreeNode tree;
-    make_tree(tree, depth);
-    return tree;
-}
-
-void IncompleteBinaryTree::make_tree(TreeNode& tree, int depth) {
-    // Generate an incomplete binary tree recursively
-    if (depth) {
-        auto lchance = distribution(generator), rchance = distribution(generator);
-        if (lchance > 0.2) tree.left = new TreeNode();
-        if (rchance > 0.2) tree.right = new TreeNode();
-        if (tree.left) this->make_tree(*(tree.left), depth - 1);
-        if (tree.right) this->make_tree(*(tree.right), depth - 1);
-    }
-}
-
-void TreeNode::calculate_xy(const unsigned int depth, const float offset) {
+void TreeNode::calculate_xy(const unsigned int depth, const float offset, const DrawOpts& options) {
     /** Calculate the x, y coordinates of each node via a preorder traversal
      */
 
     if (depth == 0) this->calculate_displacement();
 
-    this->x = offset + (displacement * X_SEPARATION);
-    this->y = depth * Y_SEPARATION;
+    this->x = offset + (displacement * options.x_sep);
+    this->y = depth * options.y_sep;
 
     if (left) left->calculate_xy(depth + 1, this->x);
     if (right) right->calculate_xy(depth + 1, this->x);
@@ -110,8 +79,8 @@ void TreeNode::merge_subtrees(float displacement) {
     }
 
     // Postorder traversal
-    if (this->left) this->left->merge_subtrees(-1.0);
-    if (this->right) this->right->merge_subtrees(1.0);
+    if (this->left) this->left->merge_subtrees(-1);
+    if (this->right) this->right->merge_subtrees(1);
 
     // Merge subtrees (if they exist)
     if (this->left && this->right) {

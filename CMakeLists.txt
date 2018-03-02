@@ -3,7 +3,7 @@ project(Tree_Drawing)
 
 set(CMAKE_CXX_FLAGS "-lpthread -static-libgcc -static-libstdc++")
 set(CMAKE_CXX_STANDARD 11)
-set(SOURCES src/tree.cpp)
+set(SOURCES src/tree.cpp src/tree_draw.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib/)
 include_directories(${CMAKE_SOURCE_DIR}/src/)
