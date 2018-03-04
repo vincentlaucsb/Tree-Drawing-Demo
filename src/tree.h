@@ -23,14 +23,36 @@ struct DrawOpts {
 
 const DrawOpts DEFAULT_DRAWING_OPTIONS = { 10, 10, 3, "black", "1px" };
 
-class TreeNode {
+/** Abstract base class for trees */
+class TreeBase {
 public:
-    float x;
-    float y;
+    float x = 0;
+    float y = 0;
     float displacement = 0;
 
-    inline TreeNode* left() { return this->left_ptr.get(); }
-    inline TreeNode* right() { return this->right_ptr.get(); }
+    virtual TreeBase* left() = 0;
+    virtual TreeBase* right() = 0;
+    virtual void calculate_xy(const unsigned int, const float, const DrawOpts&) = 0;
+
+    void calculate_displacement();
+    static std::map<int, float> cumulative_displacement(const std::vector<TreeBase*>& node_list);
+    static float distance_between(TreeBase* left, TreeBase *right);
+
+protected:
+    std::vector<TreeBase*> left_contour();
+    std::vector<TreeBase*> right_contour();
+    void left_contour(int depth, std::vector<TreeBase*>& node_list);
+    void right_contour(int depth, std::vector<TreeBase*>& node_list);
+
+private:
+    virtual void merge_subtrees(float displacement) = 0;
+};
+
+/** A node for a binary tree */
+class TreeNode: public TreeBase {
+public:
+    inline TreeNode* left() override { return this->left_ptr.get(); }
+    inline TreeNode* right() override { return this->right_ptr.get(); }
     inline TreeNode* add_left() {
         this->left_ptr = std::make_shared<TreeNode>(TreeNode());
         return this->left();
@@ -40,21 +62,14 @@ public:
         return this->right();
     };
 
-    static float distance_between(TreeNode* left, TreeNode *right);
-    static std::map<int, float> cumulative_displacement(const std::vector<TreeNode*>& node_list);
     void calculate_xy(const unsigned int depth = 0, const float offset=0,
-                      const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
-    void calculate_displacement();
-    std::vector<TreeNode*> left_contour();
-    std::vector<TreeNode*> right_contour();
+                      const DrawOpts& options=DEFAULT_DRAWING_OPTIONS) override;
 
 private:
     std::shared_ptr<TreeNode> left_ptr = nullptr;
     std::shared_ptr<TreeNode> right_ptr = nullptr;
 
-    void merge_subtrees(float displacement);
-    void left_contour(int depth, std::vector<TreeNode*>& node_list);
-    void right_contour(int depth, std::vector<TreeNode*>& node_list);
+    void merge_subtrees(float displacement) override;
 };
 
 /** Class for building incomplete binary trees */

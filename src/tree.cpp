@@ -15,12 +15,12 @@ void TreeNode::calculate_xy(const unsigned int depth, const float offset, const 
     if (right()) right()->calculate_xy(depth + 1, this->x, options);
 }
 
-void TreeNode::calculate_displacement() {
+void TreeBase::calculate_displacement() {
     /** Calculate the displacement of each node via a postorder traversal */
     this->merge_subtrees(0);
 }
 
-float TreeNode::distance_between(TreeNode* left, TreeNode* right) {
+float TreeBase::distance_between(TreeBase* left, TreeBase* right) {
     /* Return the minimum horizontal distance needed between two subtrees
      * such that they can be placed 2 units apart horizontally
      *
@@ -46,8 +46,8 @@ float TreeNode::distance_between(TreeNode* left, TreeNode* right) {
     return current_dist;
 }
 
-std::map<int, float> TreeNode::cumulative_displacement(
-        const std::vector<TreeNode*>& contour) {
+std::map<int, float> TreeBase::cumulative_displacement(
+        const std::vector<TreeBase*>& contour) {
     // Return the cumulative displacement taken up by a contour at each depth
 
     std::map<int, float> cd;
@@ -92,27 +92,27 @@ void TreeNode::merge_subtrees(float displacement) {
     }
 }
 
-std::vector<TreeNode*> TreeNode::left_contour() {
+std::vector<TreeBase*> TreeBase::left_contour() {
     /** Return a list with the left contour of a vertex */
-    std::vector<TreeNode*> node_list;
+    std::vector<TreeBase*> node_list;
     this->left_contour(0, node_list);
     return node_list;
 }
 
-void TreeNode::left_contour(int depth, std::vector<TreeNode*>& node_list) {
+void TreeBase::left_contour(int depth, std::vector<TreeBase*>& node_list) {
     if (node_list.size() <= depth) node_list.push_back(this);
     if (this->left()) this->left()->left_contour(depth + 1, node_list);
     if (this->right()) this->right()->left_contour(depth + 1, node_list);
 }
 
-std::vector<TreeNode*> TreeNode::right_contour() {
+std::vector<TreeBase*> TreeBase::right_contour() {
     /** Return a list with the right contour of a vertex */
-    std::vector<TreeNode*> node_list;
+    std::vector<TreeBase*> node_list;
     this->right_contour(0, node_list);
     return node_list;
 }
 
-void TreeNode::right_contour(int depth, std::vector<TreeNode*>& node_list) {
+void TreeBase::right_contour(int depth, std::vector<TreeBase*>& node_list) {
     if (node_list.size() <= depth) node_list.push_back(this);
     if (this->right()) this->right()->right_contour(depth + 1, node_list);
     if (this->left()) this->left()->right_contour(depth + 1, node_list);

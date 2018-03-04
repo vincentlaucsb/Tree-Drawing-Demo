@@ -1,6 +1,7 @@
 // This code contains routines for building and drawing trees
 
 #include "tree.h"
+#include "nary_tree.h"
 
 void binary_tree(TreeNode* tree, int depth) {
     // A function that creates a complete binary tree recursively
@@ -11,6 +12,18 @@ void binary_tree(TreeNode* tree, int depth) {
         right = tree->add_right();
         binary_tree(left, depth - 1);
         binary_tree(right, depth - 1);
+    }
+}
+
+void ternary_tree(NaryTreeNode* tree, int depth) {
+    // A function that creates a complete ternary tree recursively
+    NaryTreeNode* child;
+
+    if (depth) {
+        for (int i = 0; i < 3; i++) {
+            child = tree->add_child();
+            ternary_tree(child, depth - 1);
+        }
     }
 }
 
@@ -45,6 +58,15 @@ void draw_tree(SVG::Group& edges, SVG::Group& vertices, TreeNode& tree) {
     }
 }
 
+void draw_tree(SVG::Group& edges, SVG::Group& vertices, NaryTreeNode& tree) {
+    // Draw an SVG tree recursively
+    vertices.add_child(SVG::Circle(tree.x, tree.y, 3 ));
+    for (auto& child: tree.children) {
+        draw_tree(edges, vertices, *(child));
+        edges.add_child(SVG::Line(tree.x, child->x, tree.y, child->y));
+    }
+}
+
 SVG::SVG draw_binary_tree(const int depth, const DrawOpts& options) {
     // Draw a binary tree of depth n
     TreeNode tree_root;
@@ -54,6 +76,23 @@ SVG::SVG draw_binary_tree(const int depth, const DrawOpts& options) {
          .set_attr("stroke-width", options.edge_width);
 
     binary_tree(&tree_root, depth);
+    tree_root.calculate_xy(0, 0, options);
+    draw_tree(edges, vertices, tree_root);
+
+    svg_root.add_child(edges, vertices);
+    svg_root.set_bbox();
+    return svg_root;
+}
+
+SVG::SVG draw_ternary_tree(const int depth, const DrawOpts& options) {
+    // Draw a complete ternary tree of height n
+    NaryTreeNode tree_root;
+    SVG::SVG svg_root;
+    SVG::Group edges, vertices;
+    edges.set_attr("stroke", options.edge_color)
+            .set_attr("stroke-width", options.edge_width);
+
+    ternary_tree(&tree_root, depth);
     tree_root.calculate_xy(0, 0, options);
     draw_tree(edges, vertices, tree_root);
 

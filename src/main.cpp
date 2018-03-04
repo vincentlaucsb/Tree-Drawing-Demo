@@ -1,6 +1,7 @@
 // Tree drawing example of a binary tree with uniform width and height
 
 #include "tree.h"
+#include "nary_tree.h"
 #include <fstream>
 
 int main(int argc, char** argv) {
@@ -16,7 +17,8 @@ int main(int argc, char** argv) {
     opts.x_sep = 7.5;
     opts.y_sep = 7.5;
 
-    SVG::SVG tree_drawing = draw_binary_tree(depth, opts);
+    // SVG::SVG tree_drawing = draw_binary_tree(depth, opts);
+    SVG::SVG tree_drawing = draw_ternary_tree(depth, opts);
     std::ofstream outfile(argv[1]);
     outfile << tree_drawing.to_string();
     
