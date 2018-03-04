@@ -31,8 +31,10 @@ private:
     void merge_subtrees(float displacement) override;
 };
 
-void tenary_tree(NaryTreeNode* tree, int depth);
+NaryTreeNode nary_tree(int n, int height);
+void nary_tree(NaryTreeNode* tree, int n, int height);
+
 void draw_tree(SVG::Group& edges, SVG::Group& vertices, NaryTreeNode& tree);
-SVG::SVG draw_ternary_tree(const int depth, const DrawOpts& options);
+SVG::SVG draw_nary_tree(const int, const int, const DrawOpts&);
 
 #endif //TREE_DRAWING_NARY_TREE_H

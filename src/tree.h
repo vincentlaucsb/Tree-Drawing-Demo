@@ -33,14 +33,14 @@ public:
     virtual TreeBase* left() = 0;
     virtual TreeBase* right() = 0;
     virtual void calculate_xy(const unsigned int, const float, const DrawOpts&) = 0;
-
     void calculate_displacement();
     static std::map<int, float> cumulative_displacement(const std::vector<TreeBase*>& node_list);
     static float distance_between(TreeBase* left, TreeBase *right);
 
-protected:
     std::vector<TreeBase*> left_contour();
     std::vector<TreeBase*> right_contour();
+
+protected:
     void left_contour(int depth, std::vector<TreeBase*>& node_list);
     void right_contour(int depth, std::vector<TreeBase*>& node_list);
 
@@ -85,7 +85,8 @@ private:
 };
 
 void binary_tree(TreeNode* tree, int depth);
-void draw_tree(SVG::Group& edges, SVG::Group& vertices, TreeNode& tree);
+void draw_tree(SVG::Group& edges, SVG::Group& vertices, TreeNode& tree,
+               const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
 SVG::SVG draw_binary_tree(int depth, const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
 
 #endif //TREE_DRAWING_TREE_H

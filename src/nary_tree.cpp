@@ -15,7 +15,6 @@ void NaryTreeNode::calculate_xy(const unsigned int depth, const float offset, co
         child->calculate_xy(depth + 1, this->x, options);
 }
 
-
 void NaryTreeNode::merge_subtrees(float displacement) {
     /** "Merge" the subtrees of this node such that they have a horizontal separation of 2
      *  by setting an appropriate displacement for this node
@@ -35,7 +34,6 @@ void NaryTreeNode::merge_subtrees(float displacement) {
     auto width = (float)this->children.size();
     for (size_t i = 0 ; i < this->children.size(); i++)
         this->children[i]->merge_subtrees(-(width/2) + (i*width));
-    std::cout << "Width: " << width << std::endl;
 
     // Merge subtrees (if they exist) by moving from left to right, merging two
     // adjacent subtrees at a time
@@ -47,14 +45,12 @@ void NaryTreeNode::merge_subtrees(float displacement) {
         for (size_t i = 0; (i + 1) < this->children.size(); i++) {
             separation = this->distance_between(this->children[i].get(),
                                                 this->children[i + 1].get());
-            std::cout << "Distance: " << separation << std::endl;
             if (i > 0) separation += subtree_separation[i - 1];
 
             subtree_separation.push_back(separation);
         }
 
         float& total_width = subtree_separation[subtree_separation.size() - 1];
-        std::cout << "Total Width: " << total_width << std::endl;
         for (size_t i = 0; i < this->children.size(); i++) {
             if (i == 0) this->children[i]->displacement = -(total_width)/2;
             else this->children[i]->displacement = -(total_width / 2) + subtree_separation[i - 1];
