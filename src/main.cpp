@@ -13,6 +13,7 @@ int main(int argc, char** argv) {
             ("d,depth", "depth", cxxopts::value<int>());
     options.add_options("optional")
             ("n,nary", "Produce a n-ary tree", cxxopts::value<int>()->default_value("2"))
+            ("i,incomp", "Produce an incomplete tree")
             ("x,xsep", "Seperation between nodes (x-axis)", cxxopts::value<int>()->default_value("10"))
             ("y,ysep", "Seperation between nodes (y-axis)", cxxopts::value<int>()->default_value("20"))
             ("s,nodesize", "Radius of nodes (in pixels)", cxxopts::value<int>()->default_value("3"))
@@ -27,6 +28,7 @@ int main(int argc, char** argv) {
     auto result = options.parse(argc, argv);
 
     std::string file = result["file"].as<std::string>();
+    bool incomp = result["incomp"].as<bool>();
     int depth = result["depth"].as<int>(),
     nodes = result["nary"].as<int>();
 
@@ -36,8 +38,9 @@ int main(int argc, char** argv) {
     opts.node_size = result["nodesize"].as<int>();
 
     SVG::SVG tree_drawing;
-    if (nodes == 2)
-        tree_drawing = draw_binary_tree(depth, opts);
+    if (nodes == 2) {
+        else tree_drawing = draw_binary_tree(depth, opts);
+    }
     else
         tree_drawing = draw_nary_tree(nodes, depth, opts);
 
