@@ -51,26 +51,29 @@ void IncompleteBinaryTree::make_tree(TreeNode& tree, int depth) {
     }
 }
 
-void draw_tree(SVG::Group& edges, SVG::Group& vertices, TreeNode& tree, const DrawOpts& options) {
+void draw_tree(SVG::Group* edges, SVG::Group* vertices, TreeNode& tree, const DrawOpts& options) {
     // Draw an SVG tree recursively
-    vertices.add_child(SVG::Circle(tree.x, tree.y, options.node_size));
+    vertices->add_child<SVG::Circle>(tree.x, tree.y, options.node_size);
     if (tree.left()) {
         draw_tree(edges, vertices, *(tree.left()), options);
-        edges.add_child(SVG::Line(tree.x, tree.left()->x, tree.y, tree.left()->y));
+        edges->add_child<SVG::Line>(tree.x, tree.left()->x, tree.y, tree.left()->y);
     }
 
     if (tree.right()) {
         draw_tree(edges, vertices, *(tree.right()), options);
-        edges.add_child(SVG::Line(tree.x, tree.right()->x, tree.y, tree.right()->y));
+        edges->add_child<SVG::Line>(tree.x, tree.right()->x, tree.y, tree.right()->y);
     }
+
+    edges->set_attr("stroke", options.edge_color)
+            .set_attr("stroke-width", options.edge_width);
 }
 
-void draw_tree(SVG::Group& edges, SVG::Group& vertices, NaryTreeNode& tree, const DrawOpts& options) {
+void draw_tree(SVG::Group* edges, SVG::Group* vertices, NaryTreeNode& tree, const DrawOpts& options) {
     // Draw an SVG tree recursively
-    vertices.add_child(SVG::Circle(tree.x, tree.y, options.node_size));
+    vertices->add_child<SVG::Circle>(tree.x, tree.y, options.node_size);
     for (auto& child: tree.children) {
         draw_tree(edges, vertices, *(child), options);
-        edges.add_child(SVG::Line(tree.x, child->x, tree.y, child->y));
+        edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
     }
 }
 
@@ -78,15 +81,14 @@ SVG::SVG draw_binary_tree(const int depth, const DrawOpts& options) {
     // Draw a binary tree of depth n
     TreeNode tree_root;
     SVG::SVG svg_root;
-    SVG::Group edges, vertices;
-    edges.set_attr("stroke", options.edge_color)
+    auto edges = svg_root.add_child<SVG::Group>(),
+        vertices = svg_root.add_child<SVG::Group>();
+    edges->set_attr("stroke", options.edge_color)
          .set_attr("stroke-width", options.edge_width);
 
     binary_tree(&tree_root, depth);
     tree_root.calculate_xy(0, 0, options);
     draw_tree(edges, vertices, tree_root, options);
-
-    svg_root.add_child(edges, vertices);
     svg_root.set_bbox();
     return svg_root;
 }
@@ -95,14 +97,14 @@ SVG::SVG draw_nary_tree(const int n, const int height, const DrawOpts& options) 
     // Draw a complete nary tree of specified height
     NaryTreeNode tree = nary_tree(n, height);
     SVG::SVG svg_root;
-    SVG::Group edges, vertices;
-    edges.set_attr("stroke", options.edge_color)
+    auto edges = svg_root.add_child<SVG::Group>(),
+        vertices = svg_root.add_child<SVG::Group>();
+
+    edges->set_attr("stroke", options.edge_color)
             .set_attr("stroke-width", options.edge_width);
 
     tree.calculate_xy(0, 0, options);
     draw_tree(edges, vertices, tree, options);
-
-    svg_root.add_child(edges, vertices);
     svg_root.set_bbox();
     return svg_root;
 }

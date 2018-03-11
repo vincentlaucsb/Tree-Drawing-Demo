@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.9)
 project(Tree_Drawing)
 
 set(CMAKE_CXX_FLAGS "-lpthread -static-libgcc -static-libstdc++")
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(SOURCES src/tree.cpp src/nary_tree.cpp src/tree_draw.cpp)
 set(TEST_SOURCES tests/tree_tests.cpp tests/tree_drawing_tests.cpp)
 
@@ -12,3 +12,4 @@ include_directories(${CMAKE_SOURCE_DIR}/tests/)
 add_executable(tree_draw ${SOURCES} src/main.cpp )
 add_executable(tree_draw_test ${SOURCES} ${TEST_SOURCES})
 add_executable(tree_draw_runtimecalc ${SOURCES} src/runtimeTest.cpp )
+add_executable(tree_draw_paper ${SOURCES} src/paper.cpp )

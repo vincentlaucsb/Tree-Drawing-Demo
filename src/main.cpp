@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
 
     SVG::SVG tree_drawing;
     if (nodes == 2) {
-        else tree_drawing = draw_binary_tree(depth, opts);
+        tree_drawing = draw_binary_tree(depth, opts);
     }
     else
         tree_drawing = draw_nary_tree(nodes, depth, opts);

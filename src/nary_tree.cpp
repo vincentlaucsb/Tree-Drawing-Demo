@@ -40,7 +40,7 @@ void NaryTreeNode::merge_subtrees(float displacement) {
     if (!this->children.empty()) {
         // Because by default, this node has displacement zero,
         // it will be centered over its children
-        vector<float> subtree_separation;
+        std::vector<float> subtree_separation;
         float separation = 0;
         for (size_t i = 0; (i + 1) < this->children.size(); i++) {
             separation = this->distance_between(this->children[i].get(),

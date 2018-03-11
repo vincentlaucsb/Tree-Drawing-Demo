@@ -39,8 +39,7 @@ float TreeBase::distance_between(TreeBase* left, TreeBase* right) {
         if (left_cd.find(i) != left_cd.end()) left_dist = left_cd[i];
         if (right_cd.find(i) != right_cd.end()) right_dist = right_cd[i];
 
-        if ((left_dist != 0 && right_dist != 0) && (abs(right_dist - left_dist) > current_dist))
-            current_dist = abs(right_dist - left_dist);
+        if (abs(right_dist - left_dist) > current_dist) current_dist = abs(right_dist - left_dist);
     }
 
     if (( (left != right) && (left->displacement == 0) ) || (right->displacement == 0) ) current_dist += 2;
@@ -75,8 +74,8 @@ void TreeNode::merge_subtrees(float displacement) {
     }
     else if (!this->left() || !this->right()) {
         // Edge Case: One child is NULL
-        if (this->left()) this->left()->displacement = -1;
-        else this->right()->displacement = 1;
+        if (this->left()) this->left()->displacement = 1;
+        else this->right()->displacement = -1;
     }
 
     // Postorder traversal
