@@ -89,7 +89,7 @@ SVG::SVG draw_binary_tree(const int depth, const DrawOpts& options) {
     binary_tree(&tree_root, depth);
     tree_root.calculate_xy(0, 0, options);
     draw_tree(edges, vertices, tree_root, options);
-    svg_root.set_bbox();
+    svg_root.autoscale();
     return svg_root;
 }
 
@@ -105,6 +105,6 @@ SVG::SVG draw_nary_tree(const int n, const int height, const DrawOpts& options) 
 
     tree.calculate_xy(0, 0, options);
     draw_tree(edges, vertices, tree, options);
-    svg_root.set_bbox();
+    svg_root.autoscale();
     return svg_root;
 }
