@@ -14,8 +14,8 @@
 #include <random>
 
 struct DrawOpts {
-    float x_sep;
-    float y_sep;
+    double x_sep;
+    double y_sep;
     int node_size;
     std::string edge_color;
     std::string edge_width;
@@ -27,26 +27,18 @@ const DrawOpts DEFAULT_DRAWING_OPTIONS = { 10, 10, 3, "black", "1px" };
 class TreeBase {
 public:
     std::string label = "";
-    float x = 0;
-    float y = 0;
-    int displacement = 0;
+    double x = 0;
+    double y = 0;
+    double displacement = 0;
 
     virtual TreeBase* left() = 0;
     virtual TreeBase* right() = 0;
-    virtual void calculate_xy(const unsigned int, const float, const DrawOpts&) = 0;
+    virtual void calculate_xy(const unsigned int, const double, const DrawOpts&) = 0;
     void calculate_displacement();
-    static std::map<int, float> cumulative_displacement(const std::vector<TreeBase*>& node_list);
-    static float distance_between(TreeBase* left, TreeBase *right);
-
-    std::vector<TreeBase*> left_contour();
-    std::vector<TreeBase*> right_contour();
-
-protected:
-    void left_contour(int depth, std::vector<TreeBase*>& node_list);
-    void right_contour(int depth, std::vector<TreeBase*>& node_list);
+    static double distance_between(TreeBase* left, TreeBase *right);
 
 private:
-    virtual void merge_subtrees(float displacement) = 0;
+    virtual void merge_subtrees(double displacement) = 0;
 };
 
 /** A node for a binary tree */
@@ -67,14 +59,14 @@ public:
         return this->right();
     };
 
-    void calculate_xy(const unsigned int depth = 0, const float offset=0,
+    void calculate_xy(const unsigned int depth = 0, const double offset=0,
                       const DrawOpts& options=DEFAULT_DRAWING_OPTIONS) override;
 
 private:
     std::shared_ptr<TreeNode> left_ptr = nullptr;
     std::shared_ptr<TreeNode> right_ptr = nullptr;
 
-    void merge_subtrees(float displacement) override;
+    void merge_subtrees(double displacement) override;
 };
 
 /** Class for building incomplete binary trees */
@@ -86,7 +78,7 @@ public:
 
 private:
     std::default_random_engine generator;
-    std::uniform_real_distribution<float> distribution;
+    std::uniform_real_distribution<double> distribution;
 };
 
 void binary_tree(TreeNode* tree, int depth);

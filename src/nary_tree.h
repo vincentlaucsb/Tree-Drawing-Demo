@@ -23,12 +23,12 @@ public:
         return this->children[this->children.size() - 1].get();
     };
 
-    void calculate_xy(const unsigned int depth = 0, const float offset=0,
+    void calculate_xy(const unsigned int depth = 0, const double offset=0,
                       const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
     std::vector<std::shared_ptr<NaryTreeNode>> children;
 
 private:
-    void merge_subtrees(float displacement) override;
+    void merge_subtrees(double displacement) override;
 };
 
 NaryTreeNode nary_tree(int n, int height);
