@@ -57,20 +57,47 @@ void draw_tree(SVG::Group* edges, SVG::Group* vertices, TreeNode& tree, const Dr
     if (tree.left()) {
         draw_tree(edges, vertices, *(tree.left()), options);
         edges->add_child<SVG::Line>(tree.x, tree.left()->x, tree.y, tree.left()->y);
+
+        // Add text labels
+        if (!tree.left()->label.empty())
+            vertices->add_child<SVG::Text>(tree.left()->x, tree.left()->y, tree.left()->label);
     }
 
     if (tree.right()) {
         draw_tree(edges, vertices, *(tree.right()), options);
         edges->add_child<SVG::Line>(tree.x, tree.right()->x, tree.y, tree.right()->y);
+
+        // Add text labels
+        if (!tree.right()->label.empty())
+            vertices->add_child<SVG::Text>(tree.right()->x, tree.right()->y, tree.right()->label);
     }
 
     edges->set_attr("stroke", options.edge_color)
             .set_attr("stroke-width", options.edge_width);
 }
 
+void label_tree_disp(TreeNode* tree) {
+    // Give a tree's nodes a label equal to its displacement (recursively)
+    tree->label = SVG::double_to_string(tree->displacement);
+    if (tree->left()) label_tree_disp(tree->left());
+    if (tree->right()) label_tree_disp(tree->right());
+}
+
+void label_tree_disp(NaryTreeNode* tree) {
+    // Give a tree, give nodes a label equal to their displacement (recursively)
+    tree->label = SVG::double_to_string(tree->displacement);
+    for (auto& child: tree->children)
+        label_tree_disp(child.get());
+}
+
 void draw_tree(SVG::Group* edges, SVG::Group* vertices, NaryTreeNode& tree, const DrawOpts& options) {
     // Draw an SVG tree recursively
     vertices->add_child<SVG::Circle>(tree.x, tree.y, options.node_size);
+
+    // Add text labels
+    if (!tree.label.empty())
+        vertices->add_child<SVG::Text>(tree.x, tree.y, tree.label);
+
     for (auto& child: tree.children) {
         draw_tree(edges, vertices, *(child), options);
         edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
@@ -88,8 +115,14 @@ SVG::SVG draw_binary_tree(const int depth, const DrawOpts& options) {
 
     binary_tree(&tree_root, depth);
     tree_root.calculate_xy(0, 0, options);
+
+    // Add displacement labels
+    label_tree_disp(&tree_root);
+
+    // Draw SVG
     draw_tree(edges, vertices, tree_root, options);
     svg_root.autoscale();
+
     return svg_root;
 }
 
@@ -104,6 +137,11 @@ SVG::SVG draw_nary_tree(const int n, const int height, const DrawOpts& options) 
             .set_attr("stroke-width", options.edge_width);
 
     tree.calculate_xy(0, 0, options);
+
+    // Add displacement labels
+    label_tree_disp(&tree);
+
+    // Draw SVG
     draw_tree(edges, vertices, tree, options);
     svg_root.autoscale();
     return svg_root;

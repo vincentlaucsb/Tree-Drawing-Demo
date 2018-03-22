@@ -3,9 +3,9 @@
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
       <config projectName="Tree_Drawing" targetName="tree_draw_test" />
-      <config projectName="Tree_Drawing" targetName="tree_draw_paper" />
-      <config projectName="Tree_Drawing" targetName="tree_draw" />
       <config projectName="Tree_Drawing" targetName="tree_draw_runtimecalc" />
+      <config projectName="Tree_Drawing" targetName="tree_draw" />
+      <config projectName="Tree_Drawing" targetName="tree_draw_paper" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -17,7 +17,9 @@
     <list default="true" id="251f9ca6-3319-4d77-a06f-dee5b0b7f7c8" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/lib/svg" afterPath="$PROJECT_DIR$/lib/svg" />
+      <change beforePath="$PROJECT_DIR$/src/nary_tree.h" afterPath="$PROJECT_DIR$/src/nary_tree.h" />
       <change beforePath="$PROJECT_DIR$/src/paper.cpp" afterPath="$PROJECT_DIR$/src/paper.cpp" />
+      <change beforePath="$PROJECT_DIR$/src/tree.h" afterPath="$PROJECT_DIR$/src/tree.h" />
       <change beforePath="$PROJECT_DIR$/src/tree_draw.cpp" afterPath="$PROJECT_DIR$/src/tree_draw.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -34,8 +36,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1250">
-              <caret line="50" column="1" lean-forward="true" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
+            <state relative-caret-position="0">
+              <caret line="50" column="1" lean-forward="false" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
               <folding>
                 <element signature="e#72#110#0" expanded="true" />
               </folding>
@@ -46,8 +48,8 @@
       <file leaf-file-name="paper.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/paper.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1975">
-              <caret line="79" column="1" lean-forward="false" selection-start-line="79" selection-start-column="1" selection-end-line="79" selection-end-column="1" />
+            <state relative-caret-position="526">
+              <caret line="89" column="1" lean-forward="true" selection-start-line="89" selection-start-column="1" selection-end-line="89" selection-end-column="1" />
               <folding>
                 <element signature="e#47#64#0" expanded="true" />
               </folding>
@@ -55,21 +57,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tree.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="tree.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tree.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="11" column="36" lean-forward="false" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="svg.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/svg/src/svg.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5454">
-              <caret line="55" column="21" lean-forward="false" selection-start-line="55" selection-start-column="21" selection-end-line="55" selection-end-column="21" />
+            <state relative-caret-position="-1149">
+              <caret line="27" column="7" lean-forward="true" selection-start-line="27" selection-start-column="7" selection-end-line="27" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -78,18 +70,18 @@
       <file leaf-file-name="tree_draw.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tree_draw.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1525">
-              <caret line="62" column="61" lean-forward="false" selection-start-line="62" selection-start-column="61" selection-end-line="62" selection-end-column="61" />
+            <state relative-caret-position="3151">
+              <caret line="147" column="1" lean-forward="true" selection-start-line="147" selection-start-column="1" selection-end-line="147" selection-end-column="1" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tree.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="tree.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tree.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
-              <caret line="42" column="10" lean-forward="true" selection-start-line="42" selection-start-column="10" selection-end-line="42" selection-end-column="10" />
+            <state relative-caret-position="-1724">
+              <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -98,21 +90,9 @@
       <file leaf-file-name="nary_tree.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/nary_tree.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
-              <caret line="36" column="6" lean-forward="false" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
+            <state relative-caret-position="975">
+              <caret line="39" column="33" lean-forward="true" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tree_tests.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/tree_tests.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1800">
-              <caret line="72" column="1" lean-forward="false" selection-start-line="72" selection-start-column="1" selection-end-line="72" selection-end-column="1" />
-              <folding>
-                <element signature="e#26#43#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -122,16 +102,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="350">
               <caret line="14" column="57" lean-forward="false" selection-start-line="14" selection-start-column="57" selection-end-line="14" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nary_tree.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/nary_tree.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1350">
-              <caret line="54" column="13" lean-forward="false" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -151,12 +121,24 @@
       <find>options</find>
       <find>DEFAULT_DRAWING_OPTIONS</find>
       <find>calculate_xy</find>
+      <find>addL</find>
+      <find>add_left</find>
+      <find>class Text</find>
+      <find>double_to_string</find>
+      <find>std::string double_to_string</find>
+      <find>string double_to_string</find>
+      <find>Element::double_to_string</find>
+      <find>displacement</find>
+      <find>cumulative_displ</find>
+      <find>CSS</find>
+      <find>left_contour</find>
     </findStrings>
     <replaceStrings>
       <replace />
       <replace>NaryTreeNode</replace>
       <replace>tree_draw</replace>
       <replace>autoscale()</replace>
+      <replace>double_to_string</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -168,14 +150,14 @@
         <option value="$PROJECT_DIR$/tests/tree_tests.cpp" />
         <option value="$PROJECT_DIR$/tests/tree_drawing_tests.cpp" />
         <option value="$PROJECT_DIR$/src/nary_tree.cpp" />
-        <option value="$PROJECT_DIR$/src/tree.h" />
-        <option value="$PROJECT_DIR$/src/nary_tree.h" />
         <option value="$PROJECT_DIR$/src/main.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/src/tree.cpp" />
-        <option value="$PROJECT_DIR$/lib/svg/src/svg.hpp" />
+        <option value="$PROJECT_DIR$/src/nary_tree.h" />
         <option value="$PROJECT_DIR$/src/tree_draw.cpp" />
+        <option value="$PROJECT_DIR$/src/tree.h" />
+        <option value="$PROJECT_DIR$/lib/svg/src/svg.hpp" />
         <option value="$PROJECT_DIR$/src/paper.cpp" />
+        <option value="$PROJECT_DIR$/src/tree.cpp" />
       </list>
     </option>
   </component>
@@ -251,6 +233,7 @@
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="ObjectiveC" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../C++ Libraries/svg" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -264,8 +247,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.tree_draw">
-    <configuration name="tree_draw" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="test.svg 5 -i" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Tree_Drawing" TARGET_NAME="tree_draw" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Tree_Drawing" RUN_TARGET_NAME="tree_draw">
+  <component name="RunManager" selected="Application.tree_draw_paper">
+    <configuration name="tree_draw" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="test.svg 5" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Tree_Drawing" TARGET_NAME="tree_draw" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Tree_Drawing" RUN_TARGET_NAME="tree_draw_paper">
       <envs />
     </configuration>
     <configuration name="tree_draw_paper" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Tree_Drawing" TARGET_NAME="tree_draw_paper" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Tree_Drawing" RUN_TARGET_NAME="tree_draw_paper">
@@ -313,11 +296,12 @@
       <workItem from="1520735112244" duration="4496000" />
       <workItem from="1520905268272" duration="1441000" />
       <workItem from="1521660733631" duration="1023000" />
+      <workItem from="1521677334629" duration="2094000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55239000" />
+    <option name="totallyTimeSpent" value="62630000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
@@ -329,7 +313,7 @@
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33804476" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32912844" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32912844" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -703,20 +687,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="14" column="57" lean-forward="false" selection-start-line="14" selection-start-column="57" selection-end-line="14" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/tree_tests.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1800">
           <caret line="72" column="1" lean-forward="false" selection-start-line="72" selection-start-column="1" selection-end-line="72" selection-end-column="1" />
           <folding>
-            <element signature="e#26#43#0" expanded="true" />
+            <element signature="e#26#43#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -729,62 +705,74 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/nary_tree.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="36" column="6" lean-forward="false" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/svg/src/svg.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5454">
-          <caret line="55" column="21" lean-forward="false" selection-start-line="55" selection-start-column="21" selection-end-line="55" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/paper.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1975">
-          <caret line="79" column="1" lean-forward="false" selection-start-line="79" selection-start-column="1" selection-end-line="79" selection-end-column="1" />
-          <folding>
-            <element signature="e#47#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tree.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="11" column="36" lean-forward="false" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1250">
-          <caret line="50" column="1" lean-forward="true" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
+        <state relative-caret-position="0">
+          <caret line="50" column="1" lean-forward="false" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
           <folding>
             <element signature="e#72#110#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tree_draw.cpp">
+    <entry file="file://$PROJECT_DIR$/lib/svg/src/svg.hpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1525">
-          <caret line="62" column="61" lean-forward="false" selection-start-line="62" selection-start-column="61" selection-end-line="62" selection-end-column="61" />
+        <state relative-caret-position="646">
+          <caret line="489" column="1" lean-forward="false" selection-start-line="489" selection-start-column="1" selection-end-line="489" selection-end-column="1" />
+          <folding>
+            <element signature="e#1110#1122#0" expanded="false" />
+            <element signature="e#1297#1299#0" expanded="false" />
+            <element signature="e#1485#1487#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/paper.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="526">
+          <caret line="89" column="1" lean-forward="true" selection-start-line="89" selection-start-column="1" selection-end-line="89" selection-end-column="1" />
+          <folding>
+            <element signature="e#47#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="14" column="57" lean-forward="false" selection-start-line="14" selection-start-column="57" selection-end-line="14" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/nary_tree.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="975">
+          <caret line="39" column="33" lean-forward="true" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tree.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="42" column="10" lean-forward="true" selection-start-line="42" selection-start-column="10" selection-end-line="42" selection-end-column="10" />
+        <state relative-caret-position="-1724">
+          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tree_draw.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3151">
+          <caret line="147" column="1" lean-forward="true" selection-start-line="147" selection-start-column="1" selection-end-line="147" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tree.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1149">
+          <caret line="27" column="7" lean-forward="true" selection-start-line="27" selection-start-column="7" selection-end-line="27" selection-end-column="7" />
           <folding />
         </state>
       </provider>

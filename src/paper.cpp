@@ -68,6 +68,16 @@ int main(int argc, char** argv) {
     root.calculate_xy(0, 0, options);
     left.calculate_xy(0, 0, options);
     right.calculate_xy(0, 0, options);
+
+    // Add displacement labels
+    label_tree_disp(&root);
+    label_tree_disp(&left);
+    label_tree_disp(&right);
+
+    // Draw SVG
+    auto fig2_style = fig2_tree.add_child<SVG::Style>();
+    fig2_style->css["text"].set_attr("font-family", "sans-serif");
+
     draw_tree(fig2_e, fig2_v, root, options);
     draw_tree(e1, v1, left, options);
     draw_tree(e2, v2, right, options);

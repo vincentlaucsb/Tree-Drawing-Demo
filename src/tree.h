@@ -26,9 +26,10 @@ const DrawOpts DEFAULT_DRAWING_OPTIONS = { 10, 10, 3, "black", "1px" };
 /** Abstract base class for trees */
 class TreeBase {
 public:
+    std::string label = "";
     float x = 0;
     float y = 0;
-    float displacement = 0;
+    int displacement = 0;
 
     virtual TreeBase* left() = 0;
     virtual TreeBase* right() = 0;
@@ -51,14 +52,18 @@ private:
 /** A node for a binary tree */
 class TreeNode: public TreeBase {
 public:
-    inline TreeNode* left() override { return this->left_ptr.get(); }
-    inline TreeNode* right() override { return this->right_ptr.get(); }
-    inline TreeNode* add_left() {
+    TreeNode* left() override { return this->left_ptr.get(); }
+    TreeNode* right() override { return this->right_ptr.get(); }
+
+    TreeNode* add_left(const std::string& label = "") {
         this->left_ptr = std::make_shared<TreeNode>(TreeNode());
+        this->left_ptr->label = label;
         return this->left();
     };
-    inline TreeNode* add_right() {
+
+    TreeNode* add_right(const std::string& label = "") {
         this->right_ptr = std::make_shared<TreeNode>(TreeNode());
+        this->right_ptr->label = label;
         return this->right();
     };
 
@@ -87,6 +92,7 @@ private:
 void binary_tree(TreeNode* tree, int depth);
 void draw_tree(SVG::Group* edges, SVG::Group* vertices, TreeNode& tree,
                const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
+void label_tree_disp(TreeNode* tree);
 SVG::SVG draw_binary_tree(int depth, const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
 
 #endif //TREE_DRAWING_TREE_H
