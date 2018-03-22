@@ -41,9 +41,7 @@ void NaryTreeNode::merge_subtrees(double displacement) {
         for (size_t i = 0; (i + 1) < this->children.size(); i++) {
             separation = this->distance_between(this->children[i].get(),
                                                 this->children[i + 1].get());
-            std::cout << separation << std::endl;
             if (i > 0) separation += subtree_separation[i - 1];
-
             subtree_separation.push_back(separation);
         }
 

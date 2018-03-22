@@ -58,13 +58,6 @@ int main(int argc, char** argv) {
     options.node_size = 5;
 
     SVG::SVG fig2_tree, tree1, tree2;
-    auto *fig2_e = fig2_tree.add_child<SVG::Group>(),
-        *fig2_v = fig2_tree.add_child<SVG::Group>(),
-        *e1 = tree1.add_child<SVG::Group>(),
-        *v1 = tree1.add_child<SVG::Group>(),
-        *e2 = tree2.add_child<SVG::Group>(),
-        *v2 = tree2.add_child<SVG::Group>();
-
     root.calculate_xy(0, 0, options);
     left.calculate_xy(0, 0, options);
     right.calculate_xy(0, 0, options);
@@ -78,9 +71,9 @@ int main(int argc, char** argv) {
     auto fig2_style = fig2_tree.add_child<SVG::Style>();
     fig2_style->css["text"].set_attr("font-family", "sans-serif");
 
-    draw_tree(fig2_e, fig2_v, root, options);
-    draw_tree(e1, v1, left, options);
-    draw_tree(e2, v2, right, options);
+    draw_tree(fig2_tree, root, options);
+    draw_tree(tree1, left, options);
+    draw_tree(tree2, right, options);
     fig2_tree.autoscale();
     tree1.merge(tree2);
     fig2 << fig2_tree.to_string();

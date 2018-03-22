@@ -34,7 +34,7 @@ private:
 NaryTreeNode nary_tree(int n, int height);
 void nary_tree(NaryTreeNode* tree, int n, int height);
 void label_tree_disp(NaryTreeNode* tree);
-void draw_tree(SVG::Group* edges, SVG::Group* vertices, NaryTreeNode& tree);
+void draw_tree(SVG::SVG& svg, NaryTreeNode& tree);
 SVG::SVG draw_nary_tree(const int, const int, const DrawOpts&);
 
 #endif //TREE_DRAWING_NARY_TREE_H

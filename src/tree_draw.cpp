@@ -51,11 +51,27 @@ void IncompleteBinaryTree::make_tree(TreeNode& tree, int depth) {
     }
 }
 
-void draw_tree(SVG::Group* edges, SVG::Group* vertices, TreeNode& tree, const DrawOpts& options) {
+void draw_tree(SVG::SVG& svg, TreeNode& tree, const DrawOpts& options) {
     // Draw an SVG tree recursively
+    SVG::Element *vertices, *edges;
+    auto t1 = svg.get_elements_by_class("vertices"),
+        t2 = svg.get_elements_by_class("edges");
+
+    if (t1.empty()) {
+        vertices = svg.add_child<SVG::Group>();
+        vertices->set_attr("class", "vertices");
+    }
+    else vertices = t1[0];
+
+    if (t2.empty()) {
+        edges = svg.add_child<SVG::Group>();
+        edges->set_attr("class", "edges");
+    }
+    else edges = t2[0];
+
     vertices->add_child<SVG::Circle>(tree.x, tree.y, options.node_size);
     if (tree.left()) {
-        draw_tree(edges, vertices, *(tree.left()), options);
+        draw_tree(svg, *(tree.left()), options);
         edges->add_child<SVG::Line>(tree.x, tree.left()->x, tree.y, tree.left()->y);
 
         // Add text labels
@@ -64,7 +80,7 @@ void draw_tree(SVG::Group* edges, SVG::Group* vertices, TreeNode& tree, const Dr
     }
 
     if (tree.right()) {
-        draw_tree(edges, vertices, *(tree.right()), options);
+        draw_tree(svg, *(tree.right()), options);
         edges->add_child<SVG::Line>(tree.x, tree.right()->x, tree.y, tree.right()->y);
 
         // Add text labels
@@ -90,8 +106,24 @@ void label_tree_disp(NaryTreeNode* tree) {
         label_tree_disp(child.get());
 }
 
-void draw_tree(SVG::Group* edges, SVG::Group* vertices, NaryTreeNode& tree, const DrawOpts& options) {
+void draw_tree(SVG::SVG& svg, NaryTreeNode& tree, const DrawOpts& options) {
     // Draw an SVG tree recursively
+    SVG::Element *vertices, *edges;
+    auto t1 = svg.get_elements_by_class("vertices"),
+        t2 = svg.get_elements_by_class("edges");
+
+    if (t1.empty()) {
+        vertices = svg.add_child<SVG::Group>();
+        vertices->set_attr("class", "vertices");
+    }
+    else vertices = t1[0];
+
+    if (t2.empty()) {
+        edges = svg.add_child<SVG::Group>();
+        edges->set_attr("class", "edges");
+    }
+    else edges = t2[0];
+
     vertices->add_child<SVG::Circle>(tree.x, tree.y, options.node_size);
 
     // Add text labels
@@ -99,7 +131,7 @@ void draw_tree(SVG::Group* edges, SVG::Group* vertices, NaryTreeNode& tree, cons
         vertices->add_child<SVG::Text>(tree.x, tree.y, tree.label);
 
     for (auto& child: tree.children) {
-        draw_tree(edges, vertices, *(child), options);
+        draw_tree(svg, *child, options);
         edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
     }
 }
@@ -108,8 +140,8 @@ SVG::SVG draw_binary_tree(const int depth, const DrawOpts& options) {
     // Draw a binary tree of depth n
     TreeNode tree_root;
     SVG::SVG svg_root;
-    auto edges = svg_root.add_child<SVG::Group>(),
-        vertices = svg_root.add_child<SVG::Group>();
+    auto edges = svg_root.add_child<SVG::Group>("edges"),
+        vertices = svg_root.add_child<SVG::Group>("vertices");
     edges->set_attr("stroke", options.edge_color)
          .set_attr("stroke-width", options.edge_width);
 
@@ -120,7 +152,7 @@ SVG::SVG draw_binary_tree(const int depth, const DrawOpts& options) {
     label_tree_disp(&tree_root);
 
     // Draw SVG
-    draw_tree(edges, vertices, tree_root, options);
+    draw_tree(svg_root, tree_root, options);
     svg_root.autoscale();
 
     return svg_root;
@@ -130,8 +162,8 @@ SVG::SVG draw_nary_tree(const int n, const int height, const DrawOpts& options) 
     // Draw a complete nary tree of specified height
     NaryTreeNode tree = nary_tree(n, height);
     SVG::SVG svg_root;
-    auto edges = svg_root.add_child<SVG::Group>(),
-        vertices = svg_root.add_child<SVG::Group>();
+    auto edges = svg_root.add_child<SVG::Group>("edges"),
+        vertices = svg_root.add_child<SVG::Group>("vertices");
 
     edges->set_attr("stroke", options.edge_color)
             .set_attr("stroke-width", options.edge_width);
@@ -142,7 +174,7 @@ SVG::SVG draw_nary_tree(const int n, const int height, const DrawOpts& options) 
     label_tree_disp(&tree);
 
     // Draw SVG
-    draw_tree(edges, vertices, tree, options);
+    draw_tree(svg_root, tree, options);
     svg_root.autoscale();
     return svg_root;
 }

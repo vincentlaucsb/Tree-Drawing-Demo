@@ -27,9 +27,7 @@ double TreeBase::distance_between(TreeBase* left, TreeBase* right) {
      * Precondition: All nodes except the top nodes have correct displacements set
      */
 
-    // -1/1 are to deal with base case
     double left_dist = 0, right_dist = 0, current_dist = 0;
-
     while (left && right) { // Terminate when either subtree runs out of height
         // Accumulate displacements
         if (left->displacement < 0) left_dist += abs(left->displacement);
@@ -55,7 +53,7 @@ double TreeBase::distance_between(TreeBase* left, TreeBase* right) {
 }
 
 void TreeNode::merge_subtrees(double displacement) {
-    /** "Merge" the subtrees of this node such that they have a horizontal separation of 2
+    /* "Merge" the subtrees of this node such that they have a horizontal separation of 2
      *  by setting an appropriate displacement for this node
      *
      *  displacement: Default displacement value if this is a leaf node

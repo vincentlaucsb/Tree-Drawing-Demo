@@ -82,8 +82,7 @@ private:
 };
 
 void binary_tree(TreeNode* tree, int depth);
-void draw_tree(SVG::Group* edges, SVG::Group* vertices, TreeNode& tree,
-               const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
+void draw_tree(SVG::SVG& svg, TreeNode& tree, const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
 void label_tree_disp(TreeNode* tree);
 SVG::SVG draw_binary_tree(int depth, const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
 
