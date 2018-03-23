@@ -1,5 +1,6 @@
-# CLion
+# CLion/Visual Studio
 cmake-build-debug/
+.vs/
 
 # Compiled Object files
 *.slo

@@ -4,7 +4,7 @@
 #include "nary_tree.h"
 
 void binary_tree(TreeNode* tree, int depth) {
-    // A function that creates a complete binary tree recursively
+    /** A function that creates a complete binary tree recursively */
     TreeNode *left, *right;
 
     if (depth) {
@@ -53,6 +53,12 @@ void IncompleteBinaryTree::make_tree(TreeNode& tree, int depth) {
 
 void draw_tree(SVG::SVG& svg, TreeNode& tree, const DrawOpts& options) {
     // Draw an SVG tree recursively
+
+    // TODO: Refactor this out
+    svg.style("circle.left_node").set_attr("text-anchor", "end");
+    svg.style("circle.leaf").set_attr("text-anchor", "middle");
+    // END: Refactor out
+
     SVG::Element *vertices, *edges;
     auto t1 = svg.get_elements_by_class("vertices"),
         t2 = svg.get_elements_by_class("edges");
@@ -69,27 +75,42 @@ void draw_tree(SVG::SVG& svg, TreeNode& tree, const DrawOpts& options) {
     }
     else edges = t2[0];
 
+    auto left = tree.left(), right = tree.right();
     vertices->add_child<SVG::Circle>(tree.x, tree.y, options.node_size);
-    if (tree.left()) {
-        draw_tree(svg, *(tree.left()), options);
-        edges->add_child<SVG::Line>(tree.x, tree.left()->x, tree.y, tree.left()->y);
+
+    if (left) {
+        draw_tree(svg, *left, options);
+        edges->add_child<SVG::Line>(tree.x, left->x, tree.y, left->y);
 
         // Add text labels
-        if (!tree.left()->label.empty())
-            vertices->add_child<SVG::Text>(tree.left()->x, tree.left()->y, tree.left()->label);
+        if (!left->label.empty()) {
+            double x_pos = left->x - 20;
+            if (left->is_leaf())
+                vertices->add_child<SVG::Text>(x_pos + 5, left->y + 20, left->label)
+                    ->set_attr("class", "leaf");
+            else
+                vertices->add_child<SVG::Text>(x_pos, left->y - 10, left->label)
+                    ->set_attr("class", "left_node");
+                
+        }
     }
 
-    if (tree.right()) {
-        draw_tree(svg, *(tree.right()), options);
-        edges->add_child<SVG::Line>(tree.x, tree.right()->x, tree.y, tree.right()->y);
+    if (right) {
+        draw_tree(svg, *right, options);
+        edges->add_child<SVG::Line>(tree.x, right->x, tree.y, right->y);
 
         // Add text labels
-        if (!tree.right()->label.empty())
-            vertices->add_child<SVG::Text>(tree.right()->x, tree.right()->y, tree.right()->label);
+        if (!right->label.empty()) {
+            if (right->is_leaf())
+                vertices->add_child<SVG::Text>(right->x - 5, right->y + 20, right->label)
+                    ->set_attr("class", "leaf");
+            else
+                vertices->add_child<SVG::Text>(right->x, right->y - 10, right->label);
+        }
     }
 
     edges->set_attr("stroke", options.edge_color)
-            .set_attr("stroke-width", options.edge_width);
+          .set_attr("stroke-width", options.edge_width);
 }
 
 void label_tree_disp(TreeNode* tree) {
@@ -117,7 +138,7 @@ void draw_tree(SVG::SVG& svg, NaryTreeNode& tree, const DrawOpts& options) {
         vertices->set_attr("class", "vertices");
     }
     else vertices = t1[0];
-
+    
     if (t2.empty()) {
         edges = svg.add_child<SVG::Group>();
         edges->set_attr("class", "edges");

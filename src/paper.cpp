@@ -7,7 +7,10 @@
 int main(int argc, char** argv) {
     std::ofstream fig2("figure2.svg"), fig4("figure4.svg");
 
-    // Replicate Figure 2
+    /*
+     * Replicate Figure 2
+     */
+
     TreeNode root;
 
     // Left subtree
@@ -42,7 +45,10 @@ int main(int argc, char** argv) {
     d7_right->add_left();
     d7_right->add_right();
 
-    // Replicate Figure 4
+    /*
+     * Replicate Figure 4
+     */
+
     TreeNode left;
     left.add_right();
     left.add_left()->add_right()->add_right()->add_right()->add_right();
@@ -62,22 +68,39 @@ int main(int argc, char** argv) {
     left.calculate_xy(0, 0, options);
     right.calculate_xy(0, 0, options);
 
-    // Add displacement labels
-    label_tree_disp(&root);
-    label_tree_disp(&left);
-    label_tree_disp(&right);
+    /*
+     * Complete Binary Trees
+     */
+    TreeNode binary_root;
+    SVG::SVG binary_svg;
+    binary_tree(&binary_root, 5);
+    binary_root.calculate_xy(0, 0, options);
+    label_tree_disp(&binary_root);
+    std::ofstream binary_out("binary_tree.svg");
+
+    /*
+     * Complete Ternary Trees
+     */
+    NaryTreeNode ternary_root;
+    SVG::SVG ternary_svg;
+    nary_tree(&ternary_root, 3, 5);
+    ternary_root.calculate_xy(0, 0, options);
+    label_tree_disp(&ternary_root);
+    std::ofstream ternary_out("ternary_tree.svg");
 
     // Draw SVG
-    auto fig2_style = fig2_tree.add_child<SVG::Style>();
-    fig2_style->css["text"].set_attr("font-family", "sans-serif");
+    fig2_tree.style("text").set_attr("font-family", "sans-serif");
 
     draw_tree(fig2_tree, root, options);
     draw_tree(tree1, left, options);
     draw_tree(tree2, right, options);
+    draw_tree(binary_svg, binary_root, options);
     fig2_tree.autoscale();
+    binary_svg.autoscale({ 20, 20, 20, 20 });
     tree1.merge(tree2);
     fig2 << fig2_tree.to_string();
     fig4 << tree1.to_string();
+    binary_out << binary_svg.to_string();
 
     return 0;
 }

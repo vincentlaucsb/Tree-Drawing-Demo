@@ -23,6 +23,9 @@ struct DrawOpts {
 
 const DrawOpts DEFAULT_DRAWING_OPTIONS = { 10, 10, 3, "black", "1px" };
 
+/** Used for positioning text labels */
+enum NodePosition { LEFT, MIDDLE, RIGHT };
+
 /** Abstract base class for trees */
 class TreeBase {
 public:
@@ -46,6 +49,7 @@ class TreeNode: public TreeBase {
 public:
     TreeNode* left() override { return this->left_ptr.get(); }
     TreeNode* right() override { return this->right_ptr.get(); }
+    bool is_leaf() { return !this->left() && !this->right(); }
 
     TreeNode* add_left(const std::string& label = "") {
         this->left_ptr = std::make_shared<TreeNode>(TreeNode());
