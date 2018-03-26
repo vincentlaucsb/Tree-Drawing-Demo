@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{graphicx,float}
+\usepackage{listings}
+
+%opening
+\title{Tree Drawing}
+\author{Vincent La}
+
+\begin{document}
+
+\maketitle
+
+\section*{Motivation}
+Trees with at most two child nodes are used widely in computer science. The simplicity of their structure easily lends to mathematical analysis about algorithms operating on binary trees. Given the vast utility of this tree, many have tried to define algorithms which draw binary trees.
+
+\section*{Reingold-Tillford (1981)}
+One classic algorithm used to layout binary trees is described by Reingold and Tillford. 
+
+\begin{figure}[H]
+    \centering
+    \def\svgwidth{\columnwidth}
+    \input{report/tree_2.pdf_tex}
+\end{figure}
+
+\paragraph{Algorithm}
+
+First, we calculate the displacements of the nodes relative to each other.
+
+\begin{enumerate}
+    \item Base Case: Trivial
+    \item Apply this algorithm to subtrees via a postorder traversal
+    \item For each subtree, merge them horizontally such that they are two units apart horizontally
+\end{enumerate}
+
+\subsubsection*{Pseudocode}
+
+\paragraph{Distance Between}
+\begin{enumerate}
+    \item Keep a counter of the accumulated offsets for the left side ($left\_dist$) and right side ($right\_dist$). Also keep a counter for the maximum difference between the left and right side.
+    \item While there are still nodes on the left and right contour
+    \begin{enumerate}
+        \item Update $left\_dist$ and $right\_dist$
+        \item If $left\_dist + right\_dist > current\_dist$, update $current\_dist$
+    \end{enumerate}
+\end{enumerate}
+
+\subsection*{Algorithm Trace for Complete Binary Trees}
+The figures below show the displacements set by the algorithm for each node.
+
+\begin{figure}[H]
+    \caption{Algorithm trace for complete binary tree of height 6}
+    \includegraphics[width=\linewidth]{"report/binary_tree".png}
+\end{figure}
+
+\pagebreak
+
+\section*{N-Ary Tree Drawing}
+
+\pagebreak
+
+\section*{Code}
+\lstinputlisting[language=C++]{src/tree.cpp}
+
+\end{document}

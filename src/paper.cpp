@@ -95,10 +95,12 @@ int main(int argc, char** argv) {
     draw_tree(tree1, left, options);
     draw_tree(tree2, right, options);
     draw_tree(binary_svg, binary_root, options);
+
+    left_contour(fig2_tree);
     fig2_tree.autoscale();
     binary_svg.autoscale({ 20, 20, 20, 20 });
     tree1.merge(tree2);
-    fig2 << fig2_tree.to_string();
+    fig2 << fig2_tree.to_string();    
     fig4 << tree1.to_string();
     binary_out << binary_svg.to_string();
 

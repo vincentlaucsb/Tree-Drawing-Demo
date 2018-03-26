@@ -1,6 +1,6 @@
 %% Creator: Inkscape 0.91, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'tree_2.pdf' (pdf, eps, ps)
+%% Accompanies image file 'report/tree_2.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -49,6 +49,6 @@
   \global\let\svgscale\undefined%
   \makeatother%
   \begin{picture}(1,0.16932907)%
-    \put(0,0){\includegraphics[width=\unitlength,page=1]{tree_2.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{report/tree_2.pdf}}%
   \end{picture}%
 \endgroup%

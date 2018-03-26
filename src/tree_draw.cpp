@@ -3,6 +3,44 @@
 #include "tree.h"
 #include "nary_tree.h"
 
+void left_contour(SVG::SVG& root) {
+    /** Given a drawn tree, highlight the left contour */
+    auto nodes = root.get_children<SVG::Circle>();
+
+    // For every layer in the drawing (y-position), find leftmost vertex
+    std::map<double, SVG::Circle*> left;
+    for (auto& node : nodes) {
+        if ((left.find(node->y()) == left.end()) || (node->x() < left[node->y()]->x()))
+            left[node->y()] = node;
+    }
+
+    // Create boundary for highlighted nodes
+    for (auto& circ : left)
+        circ.second->set_attr("class", "contour");
+    
+    root.style("circle.contour").set_attr("fill", "red");
+}
+
+void right_contour(SVG::SVG& root) {
+    /** Given a drawn tree, highlight the left contour */
+    auto nodes = root.get_children()["circle"];
+
+    // For every layer in the drawing (y-position), find leftmost vertex
+    std::map<double, SVG::Circle*> right;
+    for (auto& node : nodes) {
+        SVG::Circle* ptr = (SVG::Circle*)node;
+        double y = ptr->y();
+        if ((right.find(y) == right.end()) || (ptr->x() > right[y]->x()))
+            right[y] = ptr;
+    }
+
+    // Create boundary for highlighted nodes
+    for (auto& circ : right)
+        circ.second->set_attr("class", "contour");
+
+    root.style("circle.contour").set_attr("fill", "red");
+}
+
 void binary_tree(TreeNode* tree, int depth) {
     /** A function that creates a complete binary tree recursively */
     TreeNode *left, *right;
@@ -60,20 +98,20 @@ void draw_tree(SVG::SVG& svg, TreeNode& tree, const DrawOpts& options) {
     // END: Refactor out
 
     SVG::Element *vertices, *edges;
-    auto t1 = svg.get_elements_by_class("vertices"),
-        t2 = svg.get_elements_by_class("edges");
+    auto t1 = svg.get_elements_by_class("edges"),
+        t2 = svg.get_elements_by_class("vertices");
 
     if (t1.empty()) {
-        vertices = svg.add_child<SVG::Group>();
-        vertices->set_attr("class", "vertices");
-    }
-    else vertices = t1[0];
-
-    if (t2.empty()) {
         edges = svg.add_child<SVG::Group>();
         edges->set_attr("class", "edges");
     }
-    else edges = t2[0];
+    else edges = t1[0];
+
+    if (t2.empty()) {
+        vertices = svg.add_child<SVG::Group>();
+        vertices->set_attr("class", "vertices");
+    }
+    else vertices = t2[0];
 
     auto left = tree.left(), right = tree.right();
     vertices->add_child<SVG::Circle>(tree.x, tree.y, options.node_size);
