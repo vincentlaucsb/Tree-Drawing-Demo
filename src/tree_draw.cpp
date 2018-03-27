@@ -3,42 +3,44 @@
 #include "tree.h"
 #include "nary_tree.h"
 
-void left_contour(SVG::SVG& root) {
-    /** Given a drawn tree, highlight the left contour */
+void update_map_right(std::map<double, SVG::Circle*>& contour, SVG::Circle* node);
+void update_map_left(std::map<double, SVG::Circle*>& contour, SVG::Circle* node);
+void highlight_contour(SVG::SVG& root, std::function<void(std::map<double, SVG::Circle*>&, SVG::Circle*)> func);
+
+void update_map_left(std::map<double, SVG::Circle*>& contour, SVG::Circle* node) {
+    if ((contour.find(node->y()) == contour.end()) || (node->x() < contour[node->y()]->x()))
+        contour[node->y()] = node;
+}
+
+void update_map_right(std::map<double, SVG::Circle*>& contour, SVG::Circle* node) {
+    if ((contour.find(node->y()) == contour.end()) || (node->x() > contour[node->y()]->x()))
+        contour[node->y()] = node;
+};
+
+void highlight_contour(SVG::SVG& root,
+    std::function<void(std::map<double, SVG::Circle*>&, SVG::Circle*)> func) {
+    /** Given a drawn tree, highlight the left or right contour */
     auto nodes = root.get_children<SVG::Circle>();
 
-    // For every layer in the drawing (y-position), find leftmost vertex
-    std::map<double, SVG::Circle*> left;
-    for (auto& node : nodes) {
-        if ((left.find(node->y()) == left.end()) || (node->x() < left[node->y()]->x()))
-            left[node->y()] = node;
-    }
+    // For every layer in the drawing (y-position), find left/right-most vertex
+    std::map<double, SVG::Circle*> contour;
+    for (auto& node : nodes) func(contour, node);
 
     // Create boundary for highlighted nodes
-    for (auto& circ : left)
-        circ.second->set_attr("class", "contour");
-    
+    for (auto& circ : contour) circ.second->set_attr("class", "contour");
     root.style("circle.contour").set_attr("fill", "red");
 }
 
-void right_contour(SVG::SVG& root) {
+void left_contour(SVG::SVG& root) {
     /** Given a drawn tree, highlight the left contour */
-    auto nodes = root.get_children()["circle"];
+    auto func = &update_map_left;
+    highlight_contour(root, func);
+}
 
-    // For every layer in the drawing (y-position), find leftmost vertex
-    std::map<double, SVG::Circle*> right;
-    for (auto& node : nodes) {
-        SVG::Circle* ptr = (SVG::Circle*)node;
-        double y = ptr->y();
-        if ((right.find(y) == right.end()) || (ptr->x() > right[y]->x()))
-            right[y] = ptr;
-    }
-
-    // Create boundary for highlighted nodes
-    for (auto& circ : right)
-        circ.second->set_attr("class", "contour");
-
-    root.style("circle.contour").set_attr("fill", "red");
+void right_contour(SVG::SVG& root) {
+    /** Given a drawn tree, highlight the right contour */
+    auto func = &update_map_right;
+    highlight_contour(root, func);
 }
 
 void binary_tree(TreeNode* tree, int depth) {
@@ -153,14 +155,14 @@ void draw_tree(SVG::SVG& svg, TreeNode& tree, const DrawOpts& options) {
 
 void label_tree_disp(TreeNode* tree) {
     // Give a tree's nodes a label equal to its displacement (recursively)
-    tree->label = SVG::double_to_string(tree->displacement);
+    tree->label = SVG::to_string(tree->displacement);
     if (tree->left()) label_tree_disp(tree->left());
     if (tree->right()) label_tree_disp(tree->right());
 }
 
 void label_tree_disp(NaryTreeNode* tree) {
     // Give a tree, give nodes a label equal to their displacement (recursively)
-    tree->label = SVG::double_to_string(tree->displacement);
+    tree->label = SVG::to_string(tree->displacement);
     for (auto& child: tree->children)
         label_tree_disp(child.get());
 }
