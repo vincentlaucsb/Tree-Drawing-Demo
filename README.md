@@ -12,4 +12,4 @@ This repo is part of my senior thesis project on graph drawing algorithms. Curre
 
 
 ### Complete Ternary Tree
-![Complete Ternary Tree](https://github.com/vincentlaucsb/Tree-Drawing-Demo/blob/master/examples/ternary_tree_no_label3.png?raw=true)
+![Complete Ternary Tree](https://github.com/vincentlaucsb/Tree-Drawing-Demo/blob/master/report/ternary_tree_no_label3.png?raw=true)
