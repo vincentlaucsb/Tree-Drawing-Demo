@@ -80,8 +80,8 @@ int main(int argc, char** argv) {
     options.node_size = 5;
 
     /*
-     * Replicate Figure 2 and illustrate left/right contours
-     */
+    * Replicate Figure 2 and illustrate left/right contours
+    */
     SVG::SVG fig2a = draw_fig2(options), fig2b = draw_fig2(options, true),
         fig2_temp1 = draw_fig2(options),
         fig2_temp2 = draw_fig2(options);
@@ -96,14 +96,14 @@ int main(int argc, char** argv) {
     fig2_contours << std::string(fig2_contours_drawing);
 
     /*
-     * Replicate Figure 4
-     */
+    * Replicate Figure 4
+    */
     SVG::SVG fig4_drawing = draw_fig4(options);
     fig4 << std::string(fig4_drawing);
 
     /*
-     * Complete Binary Trees
-     */
+    * Complete Binary Trees
+    */
     for (int i = 1; i <= 5; i++) {
         TreeNode binary_root;
         SVG::SVG binary_svg = draw_binary_tree(i, options, true),
@@ -115,8 +115,8 @@ int main(int argc, char** argv) {
     }
 
     /*
-     * Complete Ternary Trees
-     */
+    * Complete Ternary Trees
+    */
     for (int i = 1; i <= 5; i++) {
         SVG::SVG ternary_svg = draw_nary_tree(3, i, options, true),
             ternary_svg2 = draw_nary_tree(3, i, options, false);
@@ -127,15 +127,42 @@ int main(int argc, char** argv) {
     }
 
     /*
-     * Complete Quarternary and Quinary Tree
-     */
-    SVG::SVG four_svg = draw_nary_tree(4, 3, options, false);
+    * Complete Quarternary, Quinary, Senary, Septenary Tree
+    */
+    SVG::SVG four_svg = draw_nary_tree(4, 3, options, true);
     std::ofstream four_out("quarternary_tree.svg");
     four_out << std::string(four_svg);
 
-    SVG::SVG five_svg = draw_nary_tree(5, 3, options, false);
+    SVG::SVG five_svg = draw_nary_tree(5, 3, options, true);
     std::ofstream five_out("quinary_tree.svg");
     five_out << std::string(five_svg);
+
+    SVG::SVG six_svg = draw_nary_tree(6, 2, options, true);
+    std::ofstream six_out("senary_tree.svg");
+    six_out << std::string(six_svg);
+
+    SVG::SVG seven_svg = draw_nary_tree(7, 2, options, true);
+    std::ofstream seven_out("septenary_tree.svg");
+    seven_out << std::string(seven_svg);
+
+    /*
+    * Some Bullshit Tree
+    */
+
+    NaryTreeNode bs_root;
+    for (int i = 0; i < 3; i++)
+        bs_root.add_child();
+
+    for (int i = 0; i < 3; i++) {
+        bs_root.children[0]->add_child();
+        bs_root.children[2]->add_child();
+    }
+
+    bs_root.calculate_xy(0, 0, options);
+
+    SVG::SVG bs_svg = draw_tree(bs_root, options);
+    std::ofstream bs_out("bs_tree.svg");
+    bs_out << std::string(bs_svg);
 
     return 0;
 }

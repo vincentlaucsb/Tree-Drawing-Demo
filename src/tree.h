@@ -24,6 +24,9 @@ struct DrawOpts {
 
 const DrawOpts DEFAULT_DRAWING_OPTIONS = { 10, 10, 3, "black", "1px" };
 
+class TreeBase;
+using NodeList = std::vector<TreeBase*>;
+
 /** Used for positioning text labels */
 enum NodePosition { LEFT, MIDDLE, RIGHT };
 
@@ -39,10 +42,21 @@ public:
     virtual TreeBase* right() = 0;
     virtual void calculate_xy(const unsigned int, const double, const DrawOpts&) = 0;
     void calculate_displacement();
-    static double distance_between(TreeBase* left, TreeBase *right);
+    static double distance_between(TreeBase* left, TreeBase* right);
+    
+    NodeList left_contour();
+    NodeList right_contour();
+
+protected:
+    TreeBase * thread = nullptr;
+    double l_offset = 0;
+    double r_offset = 0;
+
+    virtual void merge_subtrees(double displacement) = 0;
 
 private:
-    virtual void merge_subtrees(double displacement) = 0;
+    void left_contour(int depth, NodeList& node_list);
+    void right_contour(int depth, NodeList& node_list);
 };
 
 /** A node for a binary tree */
@@ -70,7 +84,6 @@ public:
 private:
     std::shared_ptr<TreeNode> left_ptr = nullptr;
     std::shared_ptr<TreeNode> right_ptr = nullptr;
-
     void merge_subtrees(double displacement) override;
 };
 
