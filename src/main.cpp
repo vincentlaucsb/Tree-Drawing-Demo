@@ -27,35 +27,50 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    auto result = options.parse(argc, argv);
+    try {
+        auto result = options.parse(argc, argv);
 
-    std::string file = result["file"].as<std::string>();
-    bool incomp = result["incomp"].as<bool>();
-    int depth = result["depth"].as<int>(),
-        nodes = result["nary"].as<int>();
+        std::string file = result["file"].as<std::string>();
+        bool incomp = result["incomp"].as<bool>();
+        int depth = result["depth"].as<int>(),
+            nodes = result["nary"].as<int>();
 
-    DrawOpts opts = DEFAULT_DRAWING_OPTIONS;
-    opts.x_sep = result["xsep"].as<int>();
-    opts.y_sep = result["ysep"].as<int>();
-    opts.node_size = result["nodesize"].as<int>();
+        DrawOpts opts = DEFAULT_DRAWING_OPTIONS;
+        opts.x_sep = result["xsep"].as<int>();
+        opts.y_sep = result["ysep"].as<int>();
+        opts.node_size = result["nodesize"].as<int>();
 
-    SVG::SVG tree_drawing;
-    if (nodes == 2) {
-        if (incomp) {
-            auto maker = IncompleteBinaryTree();
-            auto tree = maker.make_tree(depth);
-            tree.calculate_xy();
+        SVG::SVG tree_drawing;
+        if (nodes == 2) {
+            TreeNode tree;
+            if (incomp) {
+                auto maker = IncompleteBinaryTree();
+                tree = maker.make_tree(depth);
+            }
+            else
+                tree = binary_tree(depth);
+
             tree_drawing = draw_tree(tree, opts);
         }
         else {
-            tree_drawing = draw_binary_tree(depth, opts);
-        }
-    }
-    else
-        tree_drawing = draw_nary_tree(nodes, depth, opts);
+            NaryTreeNode tree;
+            if (incomp) {
+                auto maker = IncompleteNaryTree(nodes, 1);
+                tree = maker.make_tree(depth);
+            }
+            else
+                tree = nary_tree(nodes, depth);
 
-    std::ofstream outfile(file);
-    outfile << std::string(tree_drawing);
+            tree_drawing = draw_tree(tree, opts);
+        }
+
+        std::ofstream outfile(file);
+        outfile << std::string(tree_drawing);
+    }
+    catch (cxxopts::OptionException&) {
+        std::cout << options.help({ "optional" }) << std::endl;
+        return 1;
+    }
 
     return 0;
 }
