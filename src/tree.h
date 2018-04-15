@@ -75,14 +75,14 @@ namespace tree {
         TreeNode* right() override { return this->right_ptr ? this->right_ptr.get() : (TreeNode*)this->thread_r; }
         bool is_leaf() override { return !this->left() && !this->right(); }
 
-        TreeNode* add_left(const std::string& label = "") {
-            this->left_ptr = std::make_shared<TreeNode>();
+        TreeNode* add_left(TreeNode node = TreeNode(), const std::string& label = "") {
+            this->left_ptr = std::make_shared<TreeNode>(node);
             this->left_ptr->label = label;
             return this->left();
         };
 
-        TreeNode* add_right(const std::string& label = "") {
-            this->right_ptr = std::make_shared<TreeNode>();
+        TreeNode* add_right(TreeNode node = TreeNode(), const std::string& label = "") {
+            this->right_ptr = std::make_shared<TreeNode>(node);
             this->right_ptr->label = label;
             return this->right();
         };

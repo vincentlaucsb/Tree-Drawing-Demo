@@ -29,12 +29,20 @@ namespace tree {
          */
 
         TreeBase *lroot = left, *rroot = right;
+
+        /*
+         * left_dist, right_dist: Used for calculating total width of left and right subtrees respectively
+         * left_sum, right_sum: Current accumulated offsets; used for setting thread offsets
+         * cursep: The current separation between subtrees; used as a trigger to add extra distance
+         */
         double left_dist = abs(left->displacement), right_dist = abs(right->displacement),
+            left_sum = 0, right_sum = 0,
             cursep = left_dist + right_dist;
-        double temp_ldist, temp_rdist;
 
         // Accumulate displacements and terminate when either subtree runs out of height
         while (left && right) {
+            double temp_ldist = 0, temp_rdist = 0;
+
             // Add extra distance when subtrees get too close
             if (cursep < MINIMUM_SEPARATION) {
                 left_dist += (MINIMUM_SEPARATION - cursep) / 2;
@@ -92,21 +100,39 @@ namespace tree {
                 cursep += temp_rdist;
             }
             else { right = nullptr;  }
+
+            left_sum += temp_ldist;
+            right_sum += temp_rdist;
         }
+
+        left_sum -= left_dist;
+        right_sum += right_dist;
 
         // Perform threading if necessary
         if (left) {
             auto rmost = rroot->right_most();
             if (left->thread_l != rmost.addr) {
                 rmost.addr->thread_l = left;
-                rmost.addr->thread_loffset = -abs((rmost.addr->displacement + lroot->displacement) - left_dist);
+                if (rmost.displacement < left_sum) { // Item on left subtree actually further right than rmost
+                    rmost.addr->thread_loffset = abs(rmost.displacement - left_sum);
+                }
+                else {
+                    rmost.addr->thread_loffset = -abs(left_sum - rmost.displacement);
+                }
+                
             }
         }
         if (right) {
             auto lmost = lroot->left_most();
             if (right->thread_r != lmost.addr) {
+                if (lmost.displacement > right_sum) { // Item on right subtree actually further left than lmost
+                    lmost.addr->thread_roffset = -abs(lmost.displacement - right_sum);
+                }
+                else {
+                    lmost.addr->thread_roffset = abs(right_sum - lmost.displacement);
+                }
+
                 lmost.addr->thread_r = right;
-                lmost.addr->thread_roffset = abs((lmost.addr->displacement + rroot->displacement) - right_dist);
             }
         }
 

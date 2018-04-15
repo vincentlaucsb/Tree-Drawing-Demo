@@ -99,6 +99,24 @@ int main(int argc, char** argv) {
     fig4 << std::string(fig4_drawing);
 
     /*
+     * Incomplete Binary Tree Edge Cases
+     *
+     */
+    TreeNode temp = binary_tree(2);
+    TreeNode incomp_root = binary_tree(1);
+    incomp_root.add_right(temp);
+    auto incomp_fig = draw_tree(incomp_root, options, true);
+    std::ofstream incomp_out("incomp1.svg");
+    incomp_out << std::string(incomp_fig);
+
+    TreeNode temp2 = binary_tree(2);
+    TreeNode incomp_root2 = binary_tree(1);
+    incomp_root2.add_left(temp2);
+    auto incomp_fig2 = draw_tree(incomp_root2, options, true);
+    std::ofstream incomp_out2("incomp2.svg");
+    incomp_out2 << std::string(incomp_fig2);
+
+    /*
     * Complete Binary Trees
     */
     for (int i = 1; i <= 5; i++) {
