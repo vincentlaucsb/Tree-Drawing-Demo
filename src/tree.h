@@ -34,6 +34,12 @@ namespace tree {
     /** Abstract base class for trees */
     class TreeBase {
     public:
+        struct Extreme {
+            TreeBase* addr;
+            double displacement = 0;
+            double level;
+        };
+
         std::string label = "";
         double x = 0;
         double y = 0;
@@ -46,20 +52,20 @@ namespace tree {
 
         void calculate_xy(const DrawOpts&, const unsigned int = 0, const double = 0);
         void calculate_displacement();
-        static double distance_between(TreeBase* left, TreeBase* right);
-        NodeList left_contour();
-        NodeList right_contour();
+        static double distance_between(TreeBase*, TreeBase*);
+        Extreme left_most();
+        Extreme right_most();
 
     protected:
         TreeBase * thread = nullptr;
-        double l_offset = 0;
-        double r_offset = 0;
+        double thread_loffset = 0;
+        double thread_roffset = 0;
 
         virtual void merge_subtrees(double displacement) = 0;
 
     private:
-        void left_contour(int depth, NodeList& node_list);
-        void right_contour(int depth, NodeList& node_list);
+        void left_most(Extreme&, std::vector<Extreme>&);
+        void right_most(Extreme&, std::vector<Extreme>&);
     };
 
     /** A node for a binary tree */
