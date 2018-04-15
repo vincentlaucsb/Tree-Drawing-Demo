@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
         fig4("figure4.svg");
 
     DrawOpts options = DEFAULT_DRAWING_OPTIONS;
-    options.x_sep = 20;
+    options.x_sep = 50;
     options.y_sep = 30;
     options.node_size = 5;
 
@@ -156,7 +156,7 @@ int main(int argc, char** argv) {
     bs_root.children[2]->add_child();
     }
 
-    SVG::SVG bs_svg = draw_tree(bs_root, options);
+    SVG::SVG bs_svg = draw_tree(bs_root, options, true);
     std::ofstream bs_out("bs_tree.svg");
     bs_out << std::string(bs_svg);
 

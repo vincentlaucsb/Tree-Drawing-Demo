@@ -1,7 +1,8 @@
 // This file contains only the tree drawing algorithm itself
 
 #include "tree.h"
-#define MINIMUM_SEPARATION 1
+#define MINIMUM_SEPARATION 2
+#define SEP_DEBUG std::cout << "Following thread: cursep " << cursep
 
 namespace tree {
     void TreeBase::calculate_xy(const DrawOpts& options, const unsigned int depth, const double offset) {
@@ -12,7 +13,7 @@ namespace tree {
         this->y = depth * options.y_sep;
 
         for (auto& child : this->get_children())
-            if (child != this->thread) child->calculate_xy(options, depth + 1, this->x);
+            if (child != this->thread_l) child->calculate_xy(options, depth + 1, this->x);
     }
 
     void TreeBase::calculate_displacement() {
@@ -42,21 +43,26 @@ namespace tree {
             }
 
             if (left->right()) {
-                left = left->right();
-                temp_ldist = left->displacement;
-                if (left->thread_roffset != 0) {
-                    std::cout << "Following thread" << std::endl;
+                if (left->thread_r) {
+                    SEP_DEBUG << left->thread_roffset << std::endl;
                     temp_ldist = left->thread_roffset;
                 }
+                else {
+                    temp_ldist = left->right()->displacement;
+                }
+                
+                left = left->right();
                 cursep -= temp_ldist;
             }
             else if (left->left()) {
-                left = left->left();
-                temp_ldist = left->displacement;
-                if (left->thread_loffset != 0) {
-                    std::cout << "Following thread" << std::endl;
+                if (left->thread_l) {
+                    SEP_DEBUG << left->thread_loffset << std::endl;
                     temp_ldist = left->thread_loffset;
                 }
+                else {
+                    temp_ldist = left->left()->displacement;
+                }
+                left = left->left();
                 cursep -= temp_ldist;
             }
             else {
@@ -64,21 +70,25 @@ namespace tree {
             }
 
             if (right->left()) {
-                right = right->left();
-                temp_rdist = right->displacement;
-                if (right->thread_loffset != 0) {
-                    std::cout << "Following thread" << std::endl;
+                if (right->thread_l) {
+                    SEP_DEBUG << right->thread_loffset << std::endl;
                     temp_rdist = right->thread_loffset;
                 }
+                else {
+                    temp_rdist = right->left()->displacement;
+                }
+                right = right->left();
                 cursep += temp_rdist;
             }
             else if (right->right()) {
-                right = right->right();
-                temp_rdist = right->displacement;
-                if (right->thread_roffset != 0) {
-                    std::cout << "Following thread" << std::endl;
+                if (right->thread_r) {
+                    SEP_DEBUG << right->thread_roffset << std::endl;
                     temp_rdist = right->thread_roffset;
                 }
+                else {
+                    temp_rdist = right->right()->displacement;
+                }
+                right = right->right();
                 cursep += temp_rdist;
             }
             else { right = nullptr;  }
@@ -87,16 +97,16 @@ namespace tree {
         // Perform threading if necessary
         if (left) {
             auto rmost = rroot->right_most();
-            if (left->thread != rmost.addr) {
-                rmost.addr->thread = left;
-                rmost.addr->thread->thread_loffset = -abs((rmost.addr->displacement + lroot->displacement) - left_dist);
+            if (left->thread_l != rmost.addr) {
+                rmost.addr->thread_l = left;
+                rmost.addr->thread_loffset = -abs((rmost.addr->displacement + lroot->displacement) - left_dist);
             }
         }
         if (right) {
             auto lmost = lroot->left_most();
-            if (right->thread != lmost.addr) {
-                lmost.addr->thread = right;
-                lmost.addr->thread->thread_roffset = abs((lmost.addr->displacement + rroot->displacement) - right_dist);
+            if (right->thread_r != lmost.addr) {
+                lmost.addr->thread_r = right;
+                lmost.addr->thread_roffset = abs((lmost.addr->displacement + rroot->displacement) - right_dist);
             }
         }
 
@@ -140,8 +150,8 @@ namespace tree {
         current.displacement += this->displacement;
         current.level++;
         if (lmost.size() <= current.level) lmost.push_back(current);
-        if (this->left() && !this->thread) this->left()->left_most(current, lmost);
-        if (this->right() && !this->thread) this->right()->left_most(current, lmost);
+        if (this->left()) this->left()->left_most(current, lmost);
+        if (this->right()) this->right()->left_most(current, lmost);
     }
 
     TreeBase::Extreme TreeBase::right_most() {
@@ -156,7 +166,7 @@ namespace tree {
         current.displacement += this->displacement;
         current.level++;
         if (rmost.size() <= current.level) rmost.push_back(current);
-        if (this->right() && !this->thread) this->right()->right_most(current, rmost);
-        if (this->left() && !this->thread) this->left()->right_most(current, rmost);
+        if (this->right()) this->right()->right_most(current, rmost);
+        if (this->left()) this->left()->right_most(current, rmost);
     }
 }

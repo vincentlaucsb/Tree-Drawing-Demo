@@ -63,7 +63,7 @@ namespace tree {
                 }
                 
                 auto edge = edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
-                if (tree.thread == child) edge->set_attr("class", "thread");
+                if (tree.thread_l == child || tree.thread_r == child) edge->set_attr("class", "thread");
                 else this->draw_tree(*child, disp_label); // Recursion
 
                 // Add text labels

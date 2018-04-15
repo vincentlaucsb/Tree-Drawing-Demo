@@ -1,8 +1,9 @@
 #define CATCH_CONFIG_MAIN
 #include <vector>
 #include "catch.hpp"
-#include "tree.h"
-#include "nary_tree.h"
+#include "tree_draw.h"
+
+using namespace tree;
 
 TEST_CASE("nary_tree() Test", "[nary_tree_test]") {
     // Make sure that nary_tree actually builds a complete tree

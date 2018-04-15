@@ -44,7 +44,8 @@ namespace tree {
         double x = 0;
         double y = 0;
         double displacement = 0;
-        TreeBase * thread = nullptr;
+        TreeBase * thread_l = nullptr;
+        TreeBase * thread_r = nullptr;
         double thread_loffset = 0;
         double thread_roffset = 0;
 
@@ -70,8 +71,8 @@ namespace tree {
     /** A node for a binary tree */
     class TreeNode : public TreeBase {
     public:
-        TreeNode* left() override { return this->left_ptr ? this->left_ptr.get() : (TreeNode*)this->thread; }
-        TreeNode* right() override { return this->right_ptr ? this->right_ptr.get() : (TreeNode*)this->thread; }
+        TreeNode* left() override { return this->left_ptr ? this->left_ptr.get() : (TreeNode*)this->thread_l; }
+        TreeNode* right() override { return this->right_ptr ? this->right_ptr.get() : (TreeNode*)this->thread_r; }
         bool is_leaf() override { return !this->left() && !this->right(); }
 
         TreeNode* add_left(const std::string& label = "") {

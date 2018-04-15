@@ -10,12 +10,12 @@ namespace tree {
     class NaryTreeNode : public TreeBase {
     public:
         inline NaryTreeNode* left() override {
-            if (this->children.empty()) return this->thread ? (NaryTreeNode*)this->thread : nullptr;
+            if (this->children.empty()) return (NaryTreeNode*)this->thread_l;
             return this->children[0].get();
         }
 
         inline NaryTreeNode* right() override {
-            if (this->children.empty()) return this->thread ? (NaryTreeNode*)this->thread : nullptr;
+            if (this->children.empty()) return (NaryTreeNode*)this->thread_r;
             return this->children[this->children.size() - 1].get();
         }
 
@@ -29,6 +29,10 @@ namespace tree {
         NodeList get_children() override {
             NodeList ret;
             for (auto& child : children) ret.push_back(child.get());
+            if (ret.empty()) {
+                if (this->thread_l) ret.push_back(thread_l);
+                if (this->thread_r) ret.push_back(thread_r);
+            }
             return ret;
         }
 
