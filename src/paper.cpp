@@ -126,7 +126,6 @@ int main(int argc, char** argv) {
 
     /*
     * Complete Quarternary, Quinary, Senary, Septenary Tree
-
     SVG::SVG four_svg = draw_nary_tree(4, 3, options, false);
     std::ofstream four_out("quarternary_tree.svg");
     four_out << std::string(four_svg);
@@ -146,7 +145,7 @@ int main(int argc, char** argv) {
 
     /*
     * Some Bullshit Tree
-
+    */
 
     NaryTreeNode bs_root;
     for (int i = 0; i < 3; i++)
@@ -160,7 +159,6 @@ int main(int argc, char** argv) {
     SVG::SVG bs_svg = draw_tree(bs_root, options);
     std::ofstream bs_out("bs_tree.svg");
     bs_out << std::string(bs_svg);
-    */
 
     return 0;
 }

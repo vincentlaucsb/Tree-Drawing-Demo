@@ -10,12 +10,12 @@ namespace tree {
     class NaryTreeNode : public TreeBase {
     public:
         inline NaryTreeNode* left() override {
-            if (this->children.empty()) return nullptr;
+            if (this->children.empty()) return this->thread ? (NaryTreeNode*)this->thread : nullptr;
             return this->children[0].get();
         }
 
         inline NaryTreeNode* right() override {
-            if (this->children.empty()) return nullptr;
+            if (this->children.empty()) return this->thread ? (NaryTreeNode*)this->thread : nullptr;
             return this->children[this->children.size() - 1].get();
         }
 

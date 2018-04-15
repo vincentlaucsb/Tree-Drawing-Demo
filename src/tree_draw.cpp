@@ -33,8 +33,10 @@ namespace tree {
 
         TreeDraw::TreeDraw(SVG::SVG* _tree_svg, const DrawOpts& _options) :
             tree_svg(_tree_svg), options(_options) {
+            tree_svg->style("circle").set_attr("opacity", 0.5);
             tree_svg->style("circle.left_node").set_attr("text-anchor", "end");
             tree_svg->style("circle.leaf").set_attr("text-anchor", "middle");
+            tree_svg->style("line.thread").set_attr("stroke-dasharray", "5,5");
             edges = tree_svg->add_child<SVG::Group>();
             vertices = tree_svg->add_child<SVG::Group>();
             vertices->set_attr("class", "vertices");
@@ -54,9 +56,15 @@ namespace tree {
                 auto& child = children[i];
                 bool is_left = (i == 0), is_right = ((i + 1) == children.size());
 
-                if (disp_label) child->label = SVG::to_string(child->displacement);
-                this->draw_tree(*child, disp_label);
-                edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
+                if (disp_label) {
+                    child->label = SVG::to_string(child->displacement);
+                    if (child->thread_loffset || child->thread_roffset) child->label += " (" + SVG::to_string(child->thread_loffset) + ","
+                        + SVG::to_string(child->thread_roffset) + ")";
+                }
+                
+                auto edge = edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
+                if (tree.thread == child) edge->set_attr("class", "thread");
+                else this->draw_tree(*child, disp_label); // Recursion
 
                 // Add text labels
                 if (!child->label.empty()) {

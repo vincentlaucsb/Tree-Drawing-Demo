@@ -13,7 +13,7 @@ namespace tree {
         */
 
         // Default displacement
-        this->displacement = displacement;
+        //this->displacement = displacement;
 
         // Postorder traversal
         double width = (double)this->children.size() - 1;
