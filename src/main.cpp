@@ -16,8 +16,8 @@ int main(int argc, char** argv) {
     options.add_options("optional")
         ("n,nary", "Produce a n-ary tree", cxxopts::value<int>()->default_value("2"))
         ("i,incomp", "Produce an incomplete tree")
-        ("x,xsep", "Seperation between nodes (x-axis)", cxxopts::value<int>()->default_value("50")) // 10
-        ("y,ysep", "Seperation between nodes (y-axis)", cxxopts::value<int>()->default_value("50")) // 20
+        ("x,xsep", "Seperation between nodes (x-axis)", cxxopts::value<int>()->default_value("10"))
+        ("y,ysep", "Seperation between nodes (y-axis)", cxxopts::value<int>()->default_value("20"))
         ("s,nodesize", "Radius of nodes (in pixels)", cxxopts::value<int>()->default_value("3"))
         ;
     options.parse_positional({ "file", "depth" });
@@ -45,12 +45,14 @@ int main(int argc, char** argv) {
             TreeNode tree;
             if (incomp) {
                 auto maker = IncompleteBinaryTree();
-                tree = maker.make_tree(depth);
+                while (tree.height() < depth) {
+                    tree = maker.make_tree(depth);
+                }
             }
             else
                 tree = binary_tree(depth);
 
-            tree_drawing = draw_tree(tree, opts, true);
+            tree_drawing = draw_tree(tree, opts);
         }
         else {
             NaryTreeNode tree;

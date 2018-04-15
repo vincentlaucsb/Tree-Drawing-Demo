@@ -54,6 +54,7 @@ namespace tree {
         virtual NodeList get_children() = 0;
         virtual bool is_leaf() = 0;
 
+        size_t height();
         void calculate_xy(const DrawOpts&, const unsigned int = 0, const double = 0);
         void calculate_displacement();
         static double distance_between(TreeBase*, TreeBase*);

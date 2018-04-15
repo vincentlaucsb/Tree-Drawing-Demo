@@ -16,6 +16,17 @@ namespace tree {
             if (child != this->thread_l) child->calculate_xy(options, depth + 1, this->x);
     }
 
+    size_t TreeBase::height() {
+        /** Calculate the height of this tree */
+        size_t height = 1;
+        std::deque<TreeBase*> children;
+        for (auto& child : this->get_children()) {
+            height = std::max(height, child->height() + 1);
+        }
+
+        return height;
+    }
+
     void TreeBase::calculate_displacement() {
         /** Calculate the displacement of each node via a postorder traversal */
         this->merge_subtrees(0);

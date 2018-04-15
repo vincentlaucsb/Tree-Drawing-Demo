@@ -37,6 +37,7 @@ namespace tree {
     public:
         IncompleteNaryTree(double mean, double var) :
             generator(std::random_device()()),
+            tree_chance(0, 1),
             distribution(mean, var) {};
 
         NaryTreeNode make_tree(int depth) {
@@ -46,18 +47,11 @@ namespace tree {
             return tree;
         }
 
-        void make_tree_helper(NaryTreeNode& tree, int depth) {
-            if (depth) {
-                int nodes = distribution(generator);
-                for (int i = 0; i < (int)nodes; i++) {
-                    auto child = tree.add_child();
-                    this->make_tree_helper(*child, depth - 1);
-                }
-            }
-        }
+        void make_tree_helper(NaryTreeNode& tree, int depth);
 
     private:
         std::default_random_engine generator;
+        std::uniform_int_distribution<int> tree_chance;
         std::normal_distribution<double> distribution;
     };
 

@@ -144,10 +144,23 @@ namespace tree {
         // Generate an incomplete binary tree recursively
         if (depth) {
             auto lchance = distribution(generator), rchance = distribution(generator);
-            if (lchance > 0.2) tree.add_left();
-            if (rchance > 0.2) tree.add_right();
+            if (lchance > 0.5) tree.add_left();
+            if (rchance > 0.5) tree.add_right();
             if (tree.left()) this->make_tree(*(tree.left()), depth - 1);
             if (tree.right()) this->make_tree(*(tree.right()), depth - 1);
+        }
+    }
+
+    void IncompleteNaryTree::make_tree_helper(NaryTreeNode& tree, int depth) {
+        if (depth) {
+            bool make_nodes = (tree_chance(generator) < 0.5);
+            if (make_nodes) {
+                int nodes = distribution(generator);
+                for (int i = 0; i < (int)nodes; i++) {
+                    auto child = tree.add_child();
+                    this->make_tree_helper(*child, depth - 1);
+                }
+            }
         }
     }
 

@@ -72,8 +72,8 @@ int main(int argc, char** argv) {
         fig4("figure4.svg");
 
     DrawOpts options = DEFAULT_DRAWING_OPTIONS;
-    options.x_sep = 50;
-    options.y_sep = 30;
+    options.x_sep = 10;
+    options.y_sep = 20;
     options.node_size = 5;
 
     /*
@@ -143,23 +143,23 @@ int main(int argc, char** argv) {
     }
 
     /*
-    * Complete Quarternary, Quinary, Senary, Septenary Tree
-    SVG::SVG four_svg = draw_nary_tree(4, 3, options, false);
+     * Complete Quarternary, Quinary, Senary, Septenary Tree
+     */
+    SVG::SVG four_svg = draw_tree(nary_tree(4, 3), options, false);
     std::ofstream four_out("quarternary_tree.svg");
     four_out << std::string(four_svg);
 
-    SVG::SVG five_svg = draw_nary_tree(5, 3, options, false);
+    SVG::SVG five_svg = draw_tree(nary_tree(5, 3), options, false);
     std::ofstream five_out("quinary_tree.svg");
     five_out << std::string(five_svg);
 
-    SVG::SVG six_svg = draw_nary_tree(6, 2, options, false);
+    SVG::SVG six_svg = draw_tree(nary_tree(6, 2), options, false);
     std::ofstream six_out("senary_tree.svg");
     six_out << std::string(six_svg);
 
-    SVG::SVG seven_svg = draw_nary_tree(7, 2, options, false);
+    SVG::SVG seven_svg = draw_tree(nary_tree(7, 2), options, false);
     std::ofstream seven_out("septenary_tree.svg");
     seven_out << std::string(seven_svg);
-    */
 
     /*
     * Some Bullshit Tree
