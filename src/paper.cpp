@@ -71,15 +71,18 @@ int main(int argc, char** argv) {
         fig2_contours("figure2_contours.svg"),
         fig4("figure4.svg");
 
-    DrawOpts options = DEFAULT_DRAWING_OPTIONS;
-    options.x_sep = 10;
-    options.y_sep = 20;
+    DrawOpts options = DEFAULT_DRAWING_OPTIONS, enlarged_options = DEFAULT_DRAWING_OPTIONS;
+    options.x_sep = 15;
+    options.y_sep = 30;
     options.node_size = 5;
+
+    enlarged_options.x_sep = 30;
+    enlarged_options.y_sep = 90;
 
     /*
     * Replicate Figure 2 and illustrate left/right contours
     */
-    SVG::SVG fig2a = draw_fig2(options), fig2b = draw_fig2(options, true),
+    SVG::SVG fig2a = draw_fig2(options), fig2b = draw_fig2(enlarged_options, true),
         fig2_temp1 = draw_fig2(options),
         fig2_temp2 = draw_fig2(options);
 

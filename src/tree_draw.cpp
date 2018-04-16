@@ -30,13 +30,16 @@ namespace tree {
             }
         }
 
-
         TreeDraw::TreeDraw(SVG::SVG* _tree_svg, const DrawOpts& _options) :
             tree_svg(_tree_svg), options(_options) {
             tree_svg->style("circle").set_attr("opacity", 0.5);
-            tree_svg->style("circle.left_node").set_attr("text-anchor", "end");
-            tree_svg->style("circle.leaf").set_attr("text-anchor", "middle");
+
+            tree_svg->style("text").set_attr("text-anchor", "middle")
+                .set_attr("font-family", "sans-serif")
+                .set_attr("font-size", "12px");
+
             tree_svg->style("line.thread").set_attr("stroke-dasharray", "5,5");
+
             edges = tree_svg->add_child<SVG::Group>();
             vertices = tree_svg->add_child<SVG::Group>();
             vertices->set_attr("class", "vertices");
@@ -58,8 +61,10 @@ namespace tree {
 
                 if (disp_label) {
                     child->label = SVG::to_string(child->displacement);
-                    if (child->thread_loffset || child->thread_roffset) child->label += " (" + SVG::to_string(child->thread_loffset) + ","
-                        + SVG::to_string(child->thread_roffset) + ")";
+                    if (child->thread_loffset || child->thread_roffset) {
+                        child->label += " (" + SVG::to_string(child->thread_loffset) + ","
+                            + SVG::to_string(child->thread_roffset) + ")";
+                    }
                 }
                 
                 auto edge = edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
@@ -67,14 +72,18 @@ namespace tree {
                 else this->draw_tree(*child, disp_label); // Recursion
 
                 // Add text labels
-                if (!child->label.empty()) {
-                    if (is_left)
-                        vertices->add_child<SVG::Text>(child->x, child->y - 10, child->label)
-                        ->set_attr("class", "left_node");
-                    else if (is_right)
-                        vertices->add_child<SVG::Text>(child->x, child->y - 10, child->label);
-                    else
-                        vertices->add_child<SVG::Text>(child->x, child->y - 10, child->label);
+                if (!child->label.empty()) { // Hang from vertex
+                    if (child->is_leaf()) {
+                        auto label = vertices->add_child<SVG::Text>(edge->x2(), edge->y2(), child->label);
+                        label->set_attr("transform") <<
+                            "translate(" << 0 << "," << 20 << "), " <<
+                            "rotate(" << 90 << "," << edge->x2() << "," << edge->y2() << ")";
+                    }
+                    else { // Place along edge
+                        auto label = vertices->add_child<SVG::Text>(edge->x2(), edge->y2() - 10, child->label);
+                        label->set_attr("transform") << "rotate(" << edge->angle() <<
+                            "," << edge->x2() << "," << edge->y2() << ")";
+                    }
                 }
             }
         }
