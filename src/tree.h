@@ -21,9 +21,11 @@ namespace tree {
         int node_size;
         std::string edge_color;
         std::string edge_width;
+        bool disp_label; /*< Create displacement labels */
+        bool show_threads; /*< Show threads */
     };
 
-    const DrawOpts DEFAULT_DRAWING_OPTIONS = { 10, 10, 3, "black", "1px" };
+    const DrawOpts DEFAULT_DRAWING_OPTIONS = { 10, 10, 3, "black", "1px", false, false };
 
     class TreeBase;
     using NodeList = std::vector<TreeBase*>;

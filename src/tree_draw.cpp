@@ -32,14 +32,17 @@ namespace tree {
 
         TreeDraw::TreeDraw(SVG::SVG* _tree_svg, const DrawOpts& _options) :
             tree_svg(_tree_svg), options(_options) {
-            tree_svg->style("circle").set_attr("opacity", 0.5);
-
+            // Text styling
             tree_svg->style("text").set_attr("text-anchor", "middle")
                 .set_attr("font-family", "sans-serif")
                 .set_attr("font-size", "12px");
 
+            // Thread styling
             tree_svg->style("line.thread").set_attr("stroke-dasharray", "5,5");
+            if (!_options.show_threads)
+                tree_svg->style("line.thread").set_attr("display", "none");
 
+            // Edge and vertex styling
             edges = tree_svg->add_child<SVG::Group>();
             vertices = tree_svg->add_child<SVG::Group>();
             vertices->set_attr("class", "vertices");
@@ -48,10 +51,8 @@ namespace tree {
                 .set_attr("stroke-width", options.edge_width);
         }
 
-        void TreeDraw::draw_tree(TreeBase& tree, bool disp_label) {
-            /** Draw a SVG tree recursively
-            *  disp_label: Give a tree's nodes a label equal to its displacement
-            */
+        void TreeDraw::draw_tree(TreeBase& tree) {
+            /** Draw a SVG tree recursively */
             vertices->add_child<SVG::Circle>(tree.x, tree.y, options.node_size);
 
             auto children = tree.get_children();
@@ -59,7 +60,7 @@ namespace tree {
                 auto& child = children[i];
                 bool is_left = (i == 0), is_right = ((i + 1) == children.size());
 
-                if (disp_label) {
+                if (options.disp_label) {
                     child->label = SVG::to_string(child->displacement);
                     if (child->thread_loffset || child->thread_roffset) {
                         child->label += " (" + SVG::to_string(child->thread_loffset) + ","
@@ -69,7 +70,7 @@ namespace tree {
                 
                 auto edge = edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
                 if (tree.thread_l == child || tree.thread_r == child) edge->set_attr("class", "thread");
-                else this->draw_tree(*child, disp_label); // Recursion
+                else this->draw_tree(*child); // Recursion
 
                 // Add text labels
                 if (!child->label.empty()) { // Hang from vertex
@@ -173,12 +174,12 @@ namespace tree {
         }
     }
 
-    SVG::SVG draw_tree(TreeBase& tree, const DrawOpts& options, bool disp_label) {
+    SVG::SVG draw_tree(TreeBase& tree, const DrawOpts& options) {
         /** Create an SVG drawing of the given binary or nary tree */
         SVG::SVG drawing;
         helpers::TreeDraw drawer(&drawing, options);
         tree.calculate_xy(options);            // Calculate coords of each point
-        drawer.draw_tree(tree, disp_label);
+        drawer.draw_tree(tree);
         drawing.autoscale({ 20, 20, 20, 20 }); // 20px margins on all sides
         return drawing;
     }

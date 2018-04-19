@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Motivation}{2}
+\contentsline {section}{\numberline {2}Reingold-Tillford (1981)}{2}
+\contentsline {subsection}{\numberline {2.1}Algorithm Description}{3}
+\contentsline {subsubsection}{\numberline {2.1.1}Informal Description}{3}
+\contentsline {subsubsection}{\numberline {2.1.2}Formal Description}{3}
+\contentsline {paragraph}{Node Type}{3}
+\contentsline {subsubsection}{\numberline {2.1.3}Threading}{5}
+\contentsline {subsection}{\numberline {2.2}Algorithm Trace for Complete Binary Trees}{5}
+\contentsline {subsection}{\numberline {2.3}N-Ary Tree Drawing}{8}

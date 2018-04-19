@@ -10,8 +10,8 @@ namespace tree {
         class TreeDraw {
             /** A class used for drawing trees */
         public:
-            TreeDraw(SVG::SVG* _tree_svg, const DrawOpts& _options);
-            void draw_tree(TreeBase& tree, bool disp_label = false);
+            TreeDraw(SVG::SVG* _tree_svg, const DrawOpts& _options=DEFAULT_DRAWING_OPTIONS);
+            void draw_tree(TreeBase& tree);
         protected:
             SVG::SVG* tree_svg;
             DrawOpts options;
@@ -60,5 +60,5 @@ namespace tree {
 
     TreeNode binary_tree(int height);
     NaryTreeNode nary_tree(int n, int height);
-    SVG::SVG draw_tree(TreeBase& tree, const DrawOpts& options, bool disp_label = false);
+    SVG::SVG draw_tree(TreeBase& tree, const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
 }

@@ -46,7 +46,7 @@ namespace tree {
         d7_right->add_right();
 
         // Create SVG
-        SVG::SVG fig2 = draw_tree(root, options, disp_label);
+        SVG::SVG fig2 = draw_tree(root, options);
         fig2.style("text").set_attr("font-family", "sans-serif");
         return fig2;
     }
@@ -67,14 +67,19 @@ namespace tree {
 
 int main(int argc, char** argv) {
     using namespace tree;
-    std::ofstream fig2("figure2.svg"), fig2_labels("figure2_labels.svg"),
+    std::ofstream fig2("figure2.svg"), fig2_threads("figure2_threads.svg"),
+        fig2_labels("figure2_labels.svg"),
         fig2_contours("figure2_contours.svg"),
         fig4("figure4.svg");
 
     DrawOpts options = DEFAULT_DRAWING_OPTIONS, enlarged_options = DEFAULT_DRAWING_OPTIONS;
-    options.x_sep = 15;
-    options.y_sep = 30;
+    options.x_sep = 20;
+    options.y_sep = 40;
     options.node_size = 5;
+
+    auto show_labels = options, show_threads = options;
+    show_labels.disp_label = true;
+    show_threads.show_threads = true;
 
     enlarged_options.x_sep = 30;
     enlarged_options.y_sep = 90;
@@ -82,7 +87,9 @@ int main(int argc, char** argv) {
     /*
     * Replicate Figure 2 and illustrate left/right contours
     */
-    SVG::SVG fig2a = draw_fig2(options), fig2b = draw_fig2(enlarged_options, true),
+    SVG::SVG fig2a = draw_fig2(options),
+        fig2b = draw_fig2(show_threads),
+        fig2c = draw_fig2(enlarged_options),
         fig2_temp1 = draw_fig2(options),
         fig2_temp2 = draw_fig2(options);
 
@@ -92,7 +99,8 @@ int main(int argc, char** argv) {
     SVG::SVG fig2_contours_drawing = merge(fig2_temp1, fig2_temp2);
 
     fig2 << std::string(fig2a);
-    fig2_labels << std::string(fig2b);
+    fig2_threads << std::string(fig2b);
+    fig2_labels << std::string(fig2c);
     fig2_contours << std::string(fig2_contours_drawing);
 
     /*
@@ -108,14 +116,14 @@ int main(int argc, char** argv) {
     TreeNode temp = binary_tree(2);
     TreeNode incomp_root = binary_tree(1);
     incomp_root.add_right(temp);
-    auto incomp_fig = draw_tree(incomp_root, options, true);
+    auto incomp_fig = draw_tree(incomp_root, options);
     std::ofstream incomp_out("incomp1.svg");
     incomp_out << std::string(incomp_fig);
 
     TreeNode temp2 = binary_tree(2);
     TreeNode incomp_root2 = binary_tree(1);
     incomp_root2.add_left(temp2);
-    auto incomp_fig2 = draw_tree(incomp_root2, options, true);
+    auto incomp_fig2 = draw_tree(incomp_root2, options);
     std::ofstream incomp_out2("incomp2.svg");
     incomp_out2 << std::string(incomp_fig2);
 
@@ -124,8 +132,8 @@ int main(int argc, char** argv) {
     */
     for (int i = 1; i <= 5; i++) {
         TreeNode binary_root = binary_tree(i);
-        SVG::SVG binary_svg = draw_tree(binary_root, options, true),
-            binary_svg2 = draw_tree(binary_root, options, false);
+        SVG::SVG binary_svg = draw_tree(binary_root, show_labels),
+            binary_svg2 = draw_tree(binary_root, options);
         std::ofstream binary_out("binary_tree_" + std::to_string(i) + ".svg"),
             binary_out2("binary_tree_no_label" + std::to_string(i) + ".svg");
         binary_out << std::string(binary_svg);
@@ -137,8 +145,8 @@ int main(int argc, char** argv) {
     */
     for (int i = 1; i <= 5; i++) {
         NaryTreeNode root = nary_tree(3, i);
-        SVG::SVG ternary_svg = draw_tree(root, options, true),
-            ternary_svg2 = draw_tree(root, options, false);
+        SVG::SVG ternary_svg = draw_tree(root, show_labels),
+            ternary_svg2 = draw_tree(root, options);
         std::ofstream ternary_out("ternary_tree_" + std::to_string(i) + ".svg"),
             ternary_out2("ternary_tree_no_label" + std::to_string(i) + ".svg");
         ternary_out << std::string(ternary_svg);
@@ -148,19 +156,19 @@ int main(int argc, char** argv) {
     /*
      * Complete Quarternary, Quinary, Senary, Septenary Tree
      */
-    SVG::SVG four_svg = draw_tree(nary_tree(4, 3), options, false);
+    SVG::SVG four_svg = draw_tree(nary_tree(4, 3), options);
     std::ofstream four_out("quarternary_tree.svg");
     four_out << std::string(four_svg);
 
-    SVG::SVG five_svg = draw_tree(nary_tree(5, 3), options, false);
+    SVG::SVG five_svg = draw_tree(nary_tree(5, 3), options);
     std::ofstream five_out("quinary_tree.svg");
     five_out << std::string(five_svg);
 
-    SVG::SVG six_svg = draw_tree(nary_tree(6, 2), options, false);
+    SVG::SVG six_svg = draw_tree(nary_tree(6, 2), options);
     std::ofstream six_out("senary_tree.svg");
     six_out << std::string(six_svg);
 
-    SVG::SVG seven_svg = draw_tree(nary_tree(7, 2), options, false);
+    SVG::SVG seven_svg = draw_tree(nary_tree(7, 2), options);
     std::ofstream seven_out("septenary_tree.svg");
     seven_out << std::string(seven_svg);
 
@@ -177,7 +185,7 @@ int main(int argc, char** argv) {
     bs_root.children[2]->add_child();
     }
 
-    SVG::SVG bs_svg = draw_tree(bs_root, options, true);
+    SVG::SVG bs_svg = draw_tree(bs_root, show_threads);
     std::ofstream bs_out("bs_tree.svg");
     bs_out << std::string(bs_svg);
 
