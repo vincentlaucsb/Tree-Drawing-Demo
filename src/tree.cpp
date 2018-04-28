@@ -62,53 +62,28 @@ namespace tree {
             }
 
             if (left->right()) {
-                if (left->thread_r) {
-                    SEP_DEBUG << left->thread_roffset << std::endl;
-                    temp_ldist = left->thread_roffset;
-                }
-                else {
-                    temp_ldist = left->right()->displacement;
-                }
-                
-                left = left->right();
+                temp_ldist = left->right_offset();
                 cursep -= temp_ldist;
+                left = left->right();
             }
             else if (left->left()) {
-                if (left->thread_l) {
-                    SEP_DEBUG << left->thread_loffset << std::endl;
-                    temp_ldist = left->thread_loffset;
-                }
-                else {
-                    temp_ldist = left->left()->displacement;
-                }
+                temp_ldist = left->left_offset();
+                cursep += temp_ldist;
                 left = left->left();
-                cursep -= temp_ldist;
             }
             else {
                 left = nullptr;
             }
 
             if (right->left()) {
-                if (right->thread_l) {
-                    SEP_DEBUG << right->thread_loffset << std::endl;
-                    temp_rdist = right->thread_loffset;
-                }
-                else {
-                    temp_rdist = right->left()->displacement;
-                }
+                temp_rdist = right->left_offset();
+                cursep += right->left_offset();
                 right = right->left();
-                cursep += temp_rdist;
             }
             else if (right->right()) {
-                if (right->thread_r) {
-                    SEP_DEBUG << right->thread_roffset << std::endl;
-                    temp_rdist = right->thread_roffset;
-                }
-                else {
-                    temp_rdist = right->right()->displacement;
-                }
+                temp_rdist = right->right_offset();
+                cursep += right->right_offset();
                 right = right->right();
-                cursep += temp_rdist;
             }
             else { right = nullptr;  }
 
@@ -121,7 +96,7 @@ namespace tree {
 
         // Perform threading if necessary
         if (left) {
-            auto rmost = rroot->right_most();
+            auto rmost = rroot->right_most(Extreme({ this, this->right_offset(), 0 }));
             if (left->thread_l != rmost.addr) {
                 rmost.addr->thread_l = left;
                 if (rmost.displacement < left_sum) { // Item on left subtree actually further right than rmost
@@ -134,16 +109,15 @@ namespace tree {
             }
         }
         if (right) {
-            auto lmost = lroot->left_most();
+            auto lmost = lroot->left_most(Extreme({ this, this->left_offset(), 0 }));
             if (right->thread_r != lmost.addr) {
+                lmost.addr->thread_r = right;
                 if (lmost.displacement > right_sum) { // Item on right subtree actually further left than lmost
                     lmost.addr->thread_roffset = -abs(lmost.displacement - right_sum);
                 }
                 else {
                     lmost.addr->thread_roffset = abs(right_sum - lmost.displacement);
                 }
-
-                lmost.addr->thread_r = right;
             }
         }
 
@@ -175,35 +149,45 @@ namespace tree {
         }
     }
 
-    TreeBase::Extreme TreeBase::left_most() {
+    TreeBase::Extreme TreeBase::left_most(Extreme& current) {
         /** Return the left most node in a subtree */
         std::vector<Extreme> lmost;
-        this->left_most(Extreme({ this, 0, 0 }), lmost);
+        this->left_most(current, lmost);
         return lmost.back();
     }
 
     void TreeBase::left_most(Extreme& current, std::vector<Extreme>& lmost) {
         current.addr = this;
-        current.displacement += this->displacement;
         current.level++;
         if (lmost.size() <= current.level) lmost.push_back(current);
-        if (this->left()) this->left()->left_most(current, lmost);
-        if (this->right()) this->right()->left_most(current, lmost);
+        if (this->left()) {
+            current.displacement += this->left_offset();
+            this->left()->left_most(current, lmost);
+        }
+        if (this->right()) {
+            current.displacement += this->right_offset();
+            this->right()->left_most(current, lmost);
+        }
     }
 
-    TreeBase::Extreme TreeBase::right_most() {
+    TreeBase::Extreme TreeBase::right_most(Extreme& current) {
         /** Return a list with the right contour of a vertex */
         std::vector<Extreme> rmost;
-        this->right_most(Extreme({ this, 0, 0 }), rmost);
+        this->right_most(current, rmost);
         return rmost.back();
     }
 
     void TreeBase::right_most(Extreme& current, std::vector<Extreme>& rmost) {
         current.addr = this;
-        current.displacement += this->displacement;
         current.level++;
         if (rmost.size() <= current.level) rmost.push_back(current);
-        if (this->right()) this->right()->right_most(current, rmost);
-        if (this->left()) this->left()->right_most(current, rmost);
+        if (this->right()) {
+            current.displacement += this->right_offset();
+            this->right()->right_most(current, rmost);
+        }
+        if (this->left()) {
+            current.displacement += this->left_offset();
+            this->left()->right_most(current, rmost);
+        }
     }
 }

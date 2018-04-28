@@ -55,13 +55,25 @@ namespace tree {
         virtual TreeBase* right() = 0;
         virtual NodeList get_children() = 0;
         virtual bool is_leaf() = 0;
+        
+        double left_offset() {
+            // Return this displacement of this node's left subchild
+            if (left()) return this->left()->displacement;
+            else return this->thread_loffset;
+        }
+
+        double right_offset() {
+            // Return this displacement of this node's left subchild
+            if (right()) return this->right()->displacement;
+            else return this->thread_roffset;
+        }
 
         size_t height();
         void calculate_xy(const DrawOpts&, const unsigned int = 0, const double = 0);
         void calculate_displacement();
-        static double distance_between(TreeBase*, TreeBase*);
-        Extreme left_most();
-        Extreme right_most();
+        double distance_between(TreeBase*, TreeBase*);
+        Extreme left_most(Extreme&);
+        Extreme right_most(Extreme&);
 
     protected:
         virtual void merge_subtrees(double displacement) = 0;

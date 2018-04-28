@@ -76,6 +76,9 @@ int main(int argc, char** argv) {
     options.x_sep = 20;
     options.y_sep = 40;
     options.node_size = 5;
+    // TEMPORARY
+    options.show_threads = true;
+    options.disp_label = true;
 
     auto show_labels = options, show_threads = options;
     show_labels.disp_label = true;
