@@ -113,9 +113,9 @@ int main(int argc, char** argv) {
     fig4 << std::string(fig4_drawing);
 
     /*
-     * Incomplete Binary Tree Edge Cases
-     *
-     */
+    * Incomplete Binary Tree Edge Cases
+    *
+    */
     TreeNode temp = binary_tree(2);
     TreeNode incomp_root = binary_tree(1);
     incomp_root.add_right(temp);
@@ -157,8 +157,8 @@ int main(int argc, char** argv) {
     }
 
     /*
-     * Complete Quarternary, Quinary, Senary, Septenary Tree
-     */
+    * Complete Quarternary, Quinary, Senary, Septenary Tree
+    */
     SVG::SVG four_svg = draw_tree(nary_tree(4, 3), options);
     std::ofstream four_out("quarternary_tree.svg");
     four_out << std::string(four_svg);
@@ -181,11 +181,11 @@ int main(int argc, char** argv) {
 
     NaryTreeNode bs_root;
     for (int i = 0; i < 3; i++)
-    bs_root.add_child();
+        bs_root.add_child();
 
     for (int i = 0; i < 3; i++) {
-    bs_root.children[0]->add_child();
-    bs_root.children[2]->add_child();
+        bs_root.children[0]->add_child();
+        bs_root.children[2]->add_child();
     }
 
     SVG::SVG bs_svg = draw_tree(bs_root, show_threads);

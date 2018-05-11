@@ -16,12 +16,12 @@ namespace tree {
 
         inline NaryTreeNode* right() override {
             if (this->children.empty()) return (NaryTreeNode*)this->thread_r;
-            return this->children[this->children.size() - 1].get();
+            return this->children.back().get();
         }
 
         inline NaryTreeNode* add_child() {
             this->children.push_back(std::make_shared<NaryTreeNode>(NaryTreeNode()));
-            return this->children[this->children.size() - 1].get();
+            return this->children.back().get();
         };
 
         bool is_leaf() override { return this->children.empty(); }

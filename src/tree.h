@@ -4,6 +4,7 @@
 
 #ifndef TREE_DRAWING_TREE_H
 #define TREE_DRAWING_TREE_H
+#define MINIMUM_SEPARATION 2
 
 #include "svg/src/svg.hpp"
 #include <cassert>
@@ -35,13 +36,22 @@ namespace tree {
 
     /** Abstract base class for trees */
     class TreeBase {
-    public:
         struct Extreme {
             TreeBase* addr;
             double displacement = 0;
             double level;
         };
 
+        struct ThreadInfo {
+            TreeBase* left = nullptr;
+            TreeBase* right = nullptr;
+            TreeBase* lroot = nullptr;
+            TreeBase* rroot = nullptr;
+            double left_sum;
+            double right_sum;
+        };
+
+    public:
         std::string label = "";
         double x = 0;
         double y = 0;
@@ -58,20 +68,22 @@ namespace tree {
         
         double left_offset() {
             // Return this displacement of this node's left subchild
-            if (left()) return this->left()->displacement;
-            else return this->thread_loffset;
+            if (this->thread_l) return this->thread_loffset;
+            else return this->left()->displacement;
         }
 
         double right_offset() {
             // Return this displacement of this node's left subchild
-            if (right()) return this->right()->displacement;
-            else return this->thread_roffset;
+            if (this->thread_r) return this->thread_roffset;
+            else return this->right()->displacement;
         }
 
         size_t height();
         void calculate_xy(const DrawOpts&, const unsigned int = 0, const double = 0);
         void calculate_displacement();
-        double distance_between(TreeBase*, TreeBase*);
+        std::pair<double, ThreadInfo> distance_between(TreeBase*, TreeBase*);
+        void thread_left(ThreadInfo&);
+        void thread_right(ThreadInfo&);
         Extreme left_most(Extreme&);
         Extreme right_most(Extreme&);
 
@@ -79,8 +91,8 @@ namespace tree {
         virtual void merge_subtrees(double displacement) = 0;
 
     private:
-        void left_most(Extreme&, std::vector<Extreme>&);
-        void right_most(Extreme&, std::vector<Extreme>&);
+        void left_most(Extreme, std::vector<Extreme>&);
+        void right_most(Extreme, std::vector<Extreme>&);
     };
 
     /** A node for a binary tree */

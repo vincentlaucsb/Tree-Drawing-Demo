@@ -1,7 +1,6 @@
 // This file contains only the tree drawing algorithm itself
 
 #include "tree.h"
-#define MINIMUM_SEPARATION 2
 #define SEP_DEBUG std::cout << "Following thread: cursep " << cursep
 
 namespace tree {
@@ -32,7 +31,7 @@ namespace tree {
         this->merge_subtrees(0);
     }
 
-    double TreeBase::distance_between(TreeBase* left, TreeBase* right) {
+    std::pair<double, TreeBase::ThreadInfo> TreeBase::distance_between(TreeBase* left, TreeBase* right) {
         /* Return the minimum horizontal distance needed between two subtrees
          * such that they can be placed 2 units apart horizontally
          *
@@ -54,74 +53,89 @@ namespace tree {
         while (left && right) {
             double temp_ldist = 0, temp_rdist = 0;
 
+            if (this->label == "root") std::cout << "Cursep: " << cursep << " " << left_dist << " " << right_dist << std::endl;
+
             // Add extra distance when subtrees get too close
             if (cursep < MINIMUM_SEPARATION) {
                 left_dist += (MINIMUM_SEPARATION - cursep) / 2;
                 right_dist += (MINIMUM_SEPARATION - cursep) / 2;
+                if (this->label == "root") std::cout << "Changing cursep: " << cursep << " " << left_dist << " " << right_dist << std::endl;
                 cursep = MINIMUM_SEPARATION;
             }
 
             if (left->right()) {
                 temp_ldist = left->right_offset();
-                cursep -= temp_ldist;
+                cursep -= abs(temp_ldist);
+                if (this->label == "root") std::cout << "Adding " << -temp_ldist << " to cursep (left->right)" << std::endl;
                 left = left->right();
             }
-            else if (left->left()) {
-                temp_ldist = left->left_offset();
-                cursep += temp_ldist;
-                left = left->left();
-            }
             else {
-                left = nullptr;
+                if (left->left()) {
+                    temp_ldist = left->left_offset();
+                    cursep += abs(temp_ldist);
+                    if (this->label == "root") std::cout << "Adding " << abs(temp_ldist) << " to cursep (left->left)" << std::endl;
+                }
+                left = left->left();
             }
 
             if (right->left()) {
                 temp_rdist = right->left_offset();
-                cursep += right->left_offset();
+                cursep -= abs(right->left_offset());
+                if (this->label == "root") std::cout << "Adding " << -abs(right->left_offset()) << " to cursep (right->left)" << std::endl;
                 right = right->left();
             }
-            else if (right->right()) {
-                temp_rdist = right->right_offset();
-                cursep += right->right_offset();
+            else {
+                if (right->right()) {
+                    temp_rdist = right->right_offset();
+                    cursep += abs(right->right_offset());
+                    if (this->label == "root") std::cout << "Adding " << abs(right->right_offset()) << " to cursep (right->right)" << std::endl;
+                }
                 right = right->right();
             }
-            else { right = nullptr;  }
-
+            
+            if (this->label == "root") std::cout << "left sum: " << left_sum << " " << temp_ldist << std::endl;
             left_sum += temp_ldist;
             right_sum += temp_rdist;
         }
 
+        std::cout << "Final cursep" << cursep << std::endl;
+        
+        if (this->label == "root") std::cout << "Left sum: " << left_sum << " -" << " Left Dist: " << left_dist << std::endl;
         left_sum -= left_dist;
+        if (this->label == "root") std::cout << "Final left sum: " << left_sum << std::endl;
         right_sum += right_dist;
 
-        // Perform threading if necessary
-        if (left) {
-            auto rmost = rroot->right_most(Extreme({ this, this->right_offset(), 0 }));
-            if (left->thread_l != rmost.addr) {
-                rmost.addr->thread_l = left;
-                if (rmost.displacement < left_sum) { // Item on left subtree actually further right than rmost
-                    rmost.addr->thread_loffset = abs(rmost.displacement - left_sum);
-                }
-                else {
-                    rmost.addr->thread_loffset = -abs(left_sum - rmost.displacement);
-                }
-                
-            }
-        }
-        if (right) {
-            auto lmost = lroot->left_most(Extreme({ this, this->left_offset(), 0 }));
-            if (right->thread_r != lmost.addr) {
-                lmost.addr->thread_r = right;
-                if (lmost.displacement > right_sum) { // Item on right subtree actually further left than lmost
-                    lmost.addr->thread_roffset = -abs(lmost.displacement - right_sum);
-                }
-                else {
-                    lmost.addr->thread_roffset = abs(right_sum - lmost.displacement);
-                }
-            }
-        }
+        return std::make_pair(left_dist + right_dist, ThreadInfo({
+            left, right, lroot, rroot, left_sum, right_sum
+        }));
+    }
 
-        return left_dist + right_dist;
+    void TreeBase::thread_left(TreeBase::ThreadInfo& thread) {
+        // Need to make threading part of another thing
+        // Perform threading if necessary
+        auto rmost = thread.rroot->right_most(Extreme({ this, thread.rroot->displacement, 1 }));
+        if (thread.left->thread_l != rmost.addr) {
+            rmost.addr->thread_l = thread.left;
+            if (rmost.displacement < thread.left_sum) { // Item on left subtree actually further right than rmost
+                rmost.addr->thread_loffset = abs(rmost.displacement - thread.left_sum);
+            }
+            else rmost.addr->thread_loffset = -abs(thread.left_sum - rmost.displacement);
+        }
+        std::cout << "LEFT THREAD: " <<
+            "Rmost Displacement: " << rmost.displacement << " - " <<
+            "Level: " << rmost.level << " - " <<
+            "Final Offset: " << rmost.addr->thread_loffset << std::endl;
+    }
+
+    void TreeBase::thread_right(TreeBase::ThreadInfo& thread) {
+        auto lmost = thread.lroot->left_most(Extreme({ this, thread.lroot->displacement, 1 }));
+        if (thread.right->thread_r != lmost.addr) {
+            lmost.addr->thread_r = thread.right;
+            if (lmost.displacement > thread.right_sum) { // Item on right subtree actually further left than lmost
+                lmost.addr->thread_roffset = -abs(lmost.displacement - thread.right_sum);
+            }
+            else lmost.addr->thread_roffset = abs(thread.right_sum - lmost.displacement);
+        }
     }
 
     void TreeNode::merge_subtrees(double displacement) {
@@ -143,9 +157,14 @@ namespace tree {
         if (this->left() && this->right()) {
             // Because by default, this node has displacement zero,
             // it will be centered over its children
-            double subtree_separation = (this->distance_between(this->left(), this->right())) / 2;
+            auto dist = this->distance_between(this->left(), this->right());
+            double subtree_separation = (dist.first) / 2;
             this->left()->displacement = -subtree_separation;
             this->right()->displacement = subtree_separation;
+
+            // Thread if necessary
+            if (dist.second.left) this->thread_left(dist.second);
+            if (dist.second.right) this->thread_right(dist.second);
         }
     }
 
@@ -156,7 +175,7 @@ namespace tree {
         return lmost.back();
     }
 
-    void TreeBase::left_most(Extreme& current, std::vector<Extreme>& lmost) {
+    void TreeBase::left_most(Extreme current, std::vector<Extreme>& lmost) {
         current.addr = this;
         current.level++;
         if (lmost.size() <= current.level) lmost.push_back(current);
@@ -177,7 +196,7 @@ namespace tree {
         return rmost.back();
     }
 
-    void TreeBase::right_most(Extreme& current, std::vector<Extreme>& rmost) {
+    void TreeBase::right_most(Extreme current, std::vector<Extreme>& rmost) {
         current.addr = this;
         current.level++;
         if (rmost.size() <= current.level) rmost.push_back(current);

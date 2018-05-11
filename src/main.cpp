@@ -38,6 +38,7 @@ int main(int argc, char** argv) {
         DrawOpts opts = DEFAULT_DRAWING_OPTIONS;
         opts.x_sep = result["xsep"].as<int>();
         opts.y_sep = result["ysep"].as<int>();
+        opts.show_threads = true;
         opts.node_size = result["nodesize"].as<int>();
 
         SVG::SVG tree_drawing;
@@ -45,12 +46,9 @@ int main(int argc, char** argv) {
             TreeNode tree;
             if (incomp) {
                 auto maker = IncompleteBinaryTree();
-                while (tree.height() < depth) {
-                    tree = maker.make_tree(depth);
-                }
+                while (tree.height() < depth) tree = maker.make_tree(depth);
             }
-            else
-                tree = binary_tree(depth);
+            else tree = binary_tree(depth);
 
             tree_drawing = draw_tree(tree, opts);
         }
@@ -58,10 +56,9 @@ int main(int argc, char** argv) {
             NaryTreeNode tree;
             if (incomp) {
                 auto maker = IncompleteNaryTree(nodes, 1);
-                tree = maker.make_tree(depth);
+                while (tree.height() < depth) tree = maker.make_tree(depth);
             }
-            else
-                tree = nary_tree(nodes, depth);
+            else tree = nary_tree(nodes, depth);
 
             tree_drawing = draw_tree(tree, opts);
         }

@@ -16,28 +16,26 @@ namespace tree {
         //this->displacement = displacement;
 
         // Postorder traversal
-        double width = (double)this->children.size() - 1;
-        for (size_t i = 0; i < this->children.size(); i++)
-            this->children[i]->merge_subtrees(-width / 2 + i);
+        double width = ((double)this->children.size() - 1) * MINIMUM_SEPARATION,
+            current_width = -width / 2;
+        for (size_t i = 0; i < this->children.size(); i++) {
+            this->children[i]->merge_subtrees(current_width);
+            current_width += width / (double)(this->children.size() - 1);
+        }
 
         // Merge subtrees (if they exist) by moving from left to right, merging two
         // adjacent subtrees at a time
         if (!this->children.empty()) {
             // Because by default, this node has displacement zero,
             // it will be centered over its children
-            double total_width = 0;
-            std::vector<double> subtree_separation;
             for (size_t i = 0; (i + 1) < this->children.size(); i++) {
-                double separation = this->distance_between(this->children[i].get(),
-                    this->children[i + 1].get());
-                total_width += separation;
-                subtree_separation.push_back(separation);
-            }
+                if (this->label == "root") std::cout << "Merging trees" << std::endl;
+                auto dist = this->distance_between(this->children[i].get(), this->children[i + 1].get());
+                this->children[i + 1]->displacement = i * dist.first;
 
-            double current_position = -total_width / 2;
-            for (size_t i = 0; i < this->children.size(); i++) {
-                this->children[i]->displacement = current_position;
-                if (i + 1 < this->children.size()) current_position += subtree_separation[i];
+                // Thread if necessary
+                if (dist.second.left) this->thread_left(dist.second);
+                if (dist.second.right) this->thread_right(dist.second);
             }
         }
     }
