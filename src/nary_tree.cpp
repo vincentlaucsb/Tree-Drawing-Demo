@@ -5,12 +5,12 @@
 #include "nary_tree.h"
 
 namespace tree {
-    void NaryTreeNode::merge_subtrees(double displacement) {
+    //void NaryTreeNode::merge_subtrees(double displacement) {
         /** "Merge" the subtrees of this node such that they have a horizontal separation of 2
         *  by setting an appropriate displacement for this node
         *
         *  displacement: Default displacement value if this is a leaf node
-        */
+        *
 
         // Default displacement
         //this->displacement = displacement;
@@ -38,5 +38,5 @@ namespace tree {
                 if (dist.second.right) this->thread_right(dist.second);
             }
         }
-    }
+    }*/
 }

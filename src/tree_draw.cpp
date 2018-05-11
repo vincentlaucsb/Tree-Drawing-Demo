@@ -18,8 +18,9 @@ namespace tree {
             }
         }
 
+        /*
         void nary_tree(NaryTreeNode* tree, int n, int depth) {
-            /** A helper function that creates a complete nary tree recursively */
+            ** A helper function that creates a complete nary tree recursively *
             NaryTreeNode* child;
 
             if (depth) {
@@ -28,7 +29,7 @@ namespace tree {
                     nary_tree(child, n, depth - 1);
                 }
             }
-        }
+        }*/
 
         TreeDraw::TreeDraw(SVG::SVG* _tree_svg, const DrawOpts& _options) :
             tree_svg(_tree_svg), options(_options) {
@@ -62,10 +63,6 @@ namespace tree {
 
                 if (options.disp_label) {
                     child->label = SVG::to_string(child->displacement);
-                    if (child->thread_loffset || child->thread_roffset) {
-                        child->label += " (" + SVG::to_string(child->thread_loffset) + ","
-                            + SVG::to_string(child->thread_roffset) + ")";
-                    }
                 }
                 
                 auto edge = edges->add_child<SVG::Line>(tree.x, child->x, tree.y, child->y);
@@ -137,12 +134,14 @@ namespace tree {
         return root;
     }
 
+    /**
     NaryTreeNode nary_tree(int n, int height) {
         // Create a complete nary tree of specified height
         NaryTreeNode root;
         helpers::nary_tree(&root, n, height);
         return root;
     }
+    */
 
     TreeNode IncompleteBinaryTree::make_tree(int depth) {
         TreeNode tree;
@@ -161,7 +160,7 @@ namespace tree {
         }
     }
 
-    void IncompleteNaryTree::make_tree_helper(NaryTreeNode& tree, int depth) {
+    /*void IncompleteNaryTree::make_tree_helper(NaryTreeNode& tree, int depth) {
         if (depth) {
             bool make_nodes = (tree_chance(generator) < 0.5);
             if (make_nodes) {
@@ -172,7 +171,7 @@ namespace tree {
                 }
             }
         }
-    }
+    }*/
 
     SVG::SVG draw_tree(TreeBase& tree, const DrawOpts& options) {
         /** Create an SVG drawing of the given binary or nary tree */

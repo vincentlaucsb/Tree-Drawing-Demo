@@ -7,6 +7,7 @@
 #include "tree.h"
 
 namespace tree {
+    /**
     class NaryTreeNode : public TreeBase {
     public:
         inline NaryTreeNode* left() override {
@@ -41,6 +42,7 @@ namespace tree {
     private:
         void merge_subtrees(double displacement) override;
     };
+    **/
 }
 
 #endif //TREE_DRAWING_NARY_TREE_H

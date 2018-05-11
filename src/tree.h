@@ -38,7 +38,6 @@ namespace tree {
     class TreeBase {
         struct Extreme {
             TreeBase* addr;
-            double displacement = 0;
             double level;
         };
 
@@ -47,8 +46,6 @@ namespace tree {
             TreeBase* right = nullptr;
             TreeBase* lroot = nullptr;
             TreeBase* rroot = nullptr;
-            double left_sum;
-            double right_sum;
         };
 
     public:
@@ -58,28 +55,14 @@ namespace tree {
         double displacement = 0;
         TreeBase * thread_l = nullptr;
         TreeBase * thread_r = nullptr;
-        double thread_loffset = 0;
-        double thread_roffset = 0;
 
         virtual TreeBase* left() = 0;
         virtual TreeBase* right() = 0;
         virtual NodeList get_children() = 0;
         virtual bool is_leaf() = 0;
-        
-        double left_offset() {
-            // Return this displacement of this node's left subchild
-            if (this->thread_l) return this->thread_loffset;
-            else return this->left()->displacement;
-        }
-
-        double right_offset() {
-            // Return this displacement of this node's left subchild
-            if (this->thread_r) return this->thread_roffset;
-            else return this->right()->displacement;
-        }
 
         size_t height();
-        void calculate_xy(const DrawOpts&, const unsigned int = 0, const double = 0);
+        virtual void calculate_xy(const DrawOpts&, const unsigned int = 0, const double = 0) = 0;
         void calculate_displacement();
         std::pair<double, ThreadInfo> distance_between(TreeBase*, TreeBase*);
         void thread_left(ThreadInfo&);
@@ -88,7 +71,7 @@ namespace tree {
         Extreme right_most(Extreme&);
 
     protected:
-        virtual void merge_subtrees(double displacement) = 0;
+        virtual void merge_subtrees() = 0;
 
     private:
         void left_most(Extreme, std::vector<Extreme>&);
@@ -121,10 +104,12 @@ namespace tree {
             return ret;
         }
 
+        void calculate_xy(const DrawOpts&, const unsigned int = 0, const double = 0) override;
+
     private:
         std::shared_ptr<TreeNode> left_ptr = nullptr;
         std::shared_ptr<TreeNode> right_ptr = nullptr;
-        void merge_subtrees(double displacement) override;
+        void merge_subtrees() override;
     };
 }
 

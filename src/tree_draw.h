@@ -5,7 +5,7 @@
 namespace tree {
     namespace helpers {
         void binary_tree(TreeNode* tree, int depth);
-        void nary_tree(NaryTreeNode* tree, int n, int height);
+        // void nary_tree(NaryTreeNode* tree, int n, int height);
 
         class TreeDraw {
             /** A class used for drawing trees */
@@ -32,8 +32,8 @@ namespace tree {
         std::uniform_real_distribution<double> distribution;
     };
     
-    class IncompleteNaryTree {
-        /** Class for building complete nary trees */
+    /**class IncompleteNaryTree {
+        ** Class for building complete nary trees *
     public:
         IncompleteNaryTree(double mean, double var) :
             generator(std::random_device()()),
@@ -41,7 +41,7 @@ namespace tree {
             distribution(mean, var) {};
 
         NaryTreeNode make_tree(int depth) {
-            /** Generate an incomplete binary tree recursively */
+            ** Generate an incomplete binary tree recursively *
             NaryTreeNode tree;
             make_tree_helper(tree, depth);
             return tree;
@@ -53,12 +53,12 @@ namespace tree {
         std::default_random_engine generator;
         std::uniform_int_distribution<int> tree_chance;
         std::normal_distribution<double> distribution;
-    };
+    };*/
 
     void left_contour(SVG::SVG& root);
     void right_contour(SVG::SVG& root);
 
     TreeNode binary_tree(int height);
-    NaryTreeNode nary_tree(int n, int height);
+    // NaryTreeNode nary_tree(int n, int height);
     SVG::SVG draw_tree(TreeBase& tree, const DrawOpts& options=DEFAULT_DRAWING_OPTIONS);
 }

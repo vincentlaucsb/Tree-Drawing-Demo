@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
 
             tree_drawing = draw_tree(tree, opts);
         }
+        /**
         else {
             NaryTreeNode tree;
             if (incomp) {
@@ -61,7 +62,7 @@ int main(int argc, char** argv) {
             else tree = nary_tree(nodes, depth);
 
             tree_drawing = draw_tree(tree, opts);
-        }
+        }*/
 
         std::ofstream outfile(file);
         outfile << std::string(tree_drawing);
